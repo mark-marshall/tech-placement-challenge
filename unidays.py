@@ -18,7 +18,7 @@ class _Item:
         # the price change associated with adding an item
         self.priceChange = 0
 
-        # ==== PRIVATE METHODS ====
+    # ==== PRIVATE METHODS ====
     def _ApplyDiscount(self):
         """
         Checks to see if a multi-buy discount can be applied and 
@@ -69,7 +69,7 @@ class _Item:
         associated with the added unit.
         """
         self._CalculatePrice()
-        return self.priceChanges
+        return self.priceChange
 
 class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
@@ -81,7 +81,7 @@ class UnidaysDiscountChallenge:
             'DeliveryCharge': 0
         }
         self.basket = {}
-
+    
     # ==== PRIVATE METHODS ====
     def _HandleError(self, exitCode, errorMessage):
         """
