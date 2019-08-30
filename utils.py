@@ -1,9 +1,9 @@
 pricingRules = {
-        'A': {'price': 8, 'isDiscountable': False},
-        'B': {'price': 12, 'isDiscountable': True, 'discountFrequency': 2, 'discountedPrice': 20},
-        'C': {'price': 4, 'isDiscountable': True, 'discountFrequency': 3, 'discountedPrice': 10},
-        'D': {'price': 7, 'isDiscountable': True, 'discountFrequency': 2,'discountedPrice': 7},
-        'E': {'price': 5, 'isDiscountable': True, 'discountFrequency': 3,'discountedPrice': 10},
+        'A': {'price': 8, 'status': 'notDiscountable'},
+        'B': {'price': 12, 'status': 'Discountable', 'discountFrequency': 2, 'discountedPrice': 20},
+        'C': {'price': 4, 'status': 'Discountable', 'discountFrequency': 3, 'discountedPrice': 10},
+        'D': {'price': 7, 'status': 'Discountable', 'discountFrequency': 2,'discountedPrice': 7},
+        'E': {'price': 5, 'status': 'Discountable', 'discountFrequency': 3,'discountedPrice': 10},
         }
 
 deliveryRules = {
@@ -13,4 +13,9 @@ deliveryRules = {
 
 errors = {
     'invalidItem': 'An item was passed that has not been included in the pricing rules for this basket'
+}
+
+dependencyInjectionMap = {
+        'notDiscountable': '_Item',
+        'Discountable': '_DiscountableItem'
 }
