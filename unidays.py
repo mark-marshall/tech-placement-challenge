@@ -146,7 +146,7 @@ class UnidaysDiscountChallenge:
         """
         if self.price['Total'] >= self.freeDeliveryThreshold:
             self.price['DeliveryCharge'] = 0
-        else:
+        elif self.price['Total'] < self.freeDeliveryThreshold:
             self.price['DeliveryCharge'] = self.standardDeliveryCharge
 
     def _UpdatePrice(self, priceChange):
