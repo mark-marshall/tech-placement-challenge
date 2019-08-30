@@ -1,10 +1,12 @@
 import sys
 
-from utils import errors
+from utils import errors, dependencyInjectionMap
 
 class _Item:
     def __init__(self, name, pricingRules):
         self.name = name
+        # unused quantity propery included for future-use
+        self.quantity = 0
         self.unitPrice = pricingRules['price']
         # the combined cost of all items of this type including discount
         self.totalItemPrice = 0
@@ -34,6 +36,12 @@ class _Item:
         # calculate the final price change after adding the unit
         self._CalculatePriceChange()
     
+    def _IncrementQuantity(self):
+        """
+        Increments the quantity of the item.
+        """
+        self.quantity += 1
+
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
         """
@@ -157,11 +165,11 @@ class UnidaysDiscountChallenge:
         self._CheckItemValidity(item)
         # check if this item type has already been added to basket
         if self._ItemInBasketCheck(item):
-            # create an item instance and add it to basket
-            if self.pricingRules[item]['isDiscountable']:
-                itemToAdd = _DiscountableItem(item, self.pricingRules[item])
-            elif not self.pricingRules[item]['isDiscountable']:
-                itemToAdd = _Item(item, self.pricingRules[item])
+            # determine which class the item should be created under
+            classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
+            # create the class for the item
+            itemToAdd = classToCreate(item, self.pricingRules[item])
+            # add the newly created class to the basket
             self.basket[item] = itemToAdd
         # get the price change for adding a unit of the item
         priceChange = self.basket[item].PriceChange()
