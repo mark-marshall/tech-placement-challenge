@@ -99,16 +99,44 @@ class _DiscountableItem(_Item):
         # calculate the final price change after adding the unit
         self._CalculatePriceChange(previousPrice)
 
+class _Basket:
+    def __init__(self, pricingRules):
+        self.pricingRules = pricingRules
+        self.items = {}
+    
+    def _ItemInBasketCheck(self,item):
+        """
+        Checks to see whether this item-type already exists in the basket,
+        return True in positive cases.
+        """
+        if item not in self.items:
+            return True
+    
+    def _AddItem(self, item):
+        """
+        Adds the item to the basket.
+        """
+        # check if this item type is already in the items dict
+        if self._ItemInBasketCheck(item):
+            # determine which class the item should be created under
+            classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
+            # create the class for the item
+            itemToAdd = classToCreate(item, self.pricingRules[item])
+            # add the newly created class to the items dict
+            self.items[item] = itemToAdd
+        # get the price change for adding a unit of the item
+        return self.items[item].PriceChange()
+
 class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
         self.pricingRules = pricingRules
         self.standardDeliveryCharge = deliveryRules['standard']
         self.freeDeliveryThreshold = deliveryRules['freeThreshold']
+        self.basket = _Basket(self.pricingRules)
         self.price = {
             'Total': 0,
             'DeliveryCharge': 0
         }
-        self.basket = {}
     
     # ==== PRIVATE METHODS ====
     def _HandleError(self, exitCode, errorMessage):
@@ -125,14 +153,6 @@ class UnidaysDiscountChallenge:
         """
         if item not in self.pricingRules:
             self._HandleError(0, 'invalidItem')
-    
-    def _ItemInBasketCheck(self,item):
-        """
-        Checks to see whether this item-type already exists in the basket,
-        return True in positive cases.
-        """
-        if item not in self.basket:
-            return True
     
     def _UpdateTotalPrice (self,priceChange):
         """
@@ -163,16 +183,8 @@ class UnidaysDiscountChallenge:
         """
         # check to make sure pricing rules have been provided for the item
         self._CheckItemValidity(item)
-        # check if this item type has already been added to basket
-        if self._ItemInBasketCheck(item):
-            # determine which class the item should be created under
-            classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
-            # create the class for the item
-            itemToAdd = classToCreate(item, self.pricingRules[item])
-            # add the newly created class to the basket
-            self.basket[item] = itemToAdd
-        # get the price change for adding a unit of the item
-        priceChange = self.basket[item].PriceChange()
+        # add the item to the basket
+        priceChange = self.basket._AddItem(item)
         # update the price
         self._UpdatePrice(priceChange)
     

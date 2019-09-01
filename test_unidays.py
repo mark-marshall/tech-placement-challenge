@@ -40,6 +40,7 @@ class Test(unittest.TestCase):
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         priceCalculator.AddToBasket('B')
+        print(f"Price of item B: {priceCalculator.basket.items['B'].totalItemPrice}")
         self.assertEqual(priceCalculator.price['Total'], 12)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
