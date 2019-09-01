@@ -127,12 +127,26 @@ class _Basket:
         # get the price change for adding a unit of the item
         return self.items[item].PriceChange()
 
+class _Delivery:
+    def __init__(self, deliveryRules):
+        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
+        self.standardDeliveryCharge = deliveryRules['standard']
+    
+    def _CalculateDeliveryPrice(self, basketPrice):
+        """
+        Returns the delivery charge according to the delivery rules.
+        """
+        if basketPrice >= self.freeDeliveryThreshold:
+            return 0
+        elif basketPrice < self.freeDeliveryThreshold:
+            return self.standardDeliveryCharge
+    
 class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
         self.pricingRules = pricingRules
-        self.standardDeliveryCharge = deliveryRules['standard']
-        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
+        self.deliveryRules = deliveryRules
         self.basket = _Basket(self.pricingRules)
+        self.delivery = _Delivery(self.deliveryRules)
         self.price = {
             'Total': 0,
             'DeliveryCharge': 0
@@ -160,21 +174,11 @@ class UnidaysDiscountChallenge:
         """
         self.price['Total'] += priceChange
 
-    def _UpdateDeliveryCharge(self):
+    def _UpdateDeliveryCharge(self, deliveryCharge):
         """
         Updates the delivery charge according to the delivery rules.
         """
-        if self.price['Total'] >= self.freeDeliveryThreshold:
-            self.price['DeliveryCharge'] = 0
-        elif self.price['Total'] < self.freeDeliveryThreshold:
-            self.price['DeliveryCharge'] = self.standardDeliveryCharge
-
-    def _UpdatePrice(self, priceChange):
-        """
-        Calls all necessary price change functions.
-        """
-        self._UpdateTotalPrice(priceChange)
-        self._UpdateDeliveryCharge()
+        self.price['DeliveryCharge'] = deliveryCharge
     
     # ==== PUBLIC METHODS ====
     def AddToBasket(self, item):
@@ -185,8 +189,13 @@ class UnidaysDiscountChallenge:
         self._CheckItemValidity(item)
         # add the item to the basket
         priceChange = self.basket._AddItem(item)
-        # update the price
-        self._UpdatePrice(priceChange)
+        # update the checkout price
+        self._UpdateTotalPrice(priceChange)
+        # calculate the delivery price
+        deliveryCharge = self.delivery._CalculateDeliveryPrice(self.price['Total'])
+        # update the delivery price
+        self._UpdateDeliveryCharge(deliveryCharge)
+        
     
     def CalculateTotalPrice(self):
         """
@@ -194,3 +203,7 @@ class UnidaysDiscountChallenge:
         charge with all discounts are applied.
         """
         return self.price
+
+
+# TODO: Work through comments and reword
+# TODO: Unhappy path when correct discount properties are not included in a discountable item
