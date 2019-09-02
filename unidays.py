@@ -1,6 +1,6 @@
 import sys
 
-from config import errors, dependencyInjectionMap, itemValidatorMap
+from config import errors, classInjectionMap, itemValidatorMap
 
 class ErrorLogger:
     def __init__(self, errorMessages, exitCode):
@@ -178,7 +178,7 @@ class Basket:
         # check if this item type is already in the items dict
         if self._ItemEligibleForBasket(item):
             # determine which class the item should be created under
-            classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
+            classToCreate = eval(classInjectionMap[self.pricingRules[item]['status']])
             # create the class for the item
             itemToAdd = classToCreate(item, self.pricingRules[item])
             # add the newly created class to the items dictionary
@@ -254,3 +254,5 @@ class UnidaysDiscountChallenge:
 
 # TODO: Update tests for expanded item validator class
 # TODO: Update tests to include a different pricing rule and delivery rule config
+# TODO: Add print repr to basket/items that shows basket: item types with quantities
+

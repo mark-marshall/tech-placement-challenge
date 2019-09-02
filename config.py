@@ -24,7 +24,7 @@ itemValidatorMap = {
         'Discountable': {'discountFrequency': 'noDiscountFrequency','discountedPrice': 'noDiscountedPrice'}
 }
 
-dependencyInjectionMap = {
+classInjectionMap = {
         'notDiscountable': 'Item',
         'Discountable': 'DiscountableItem'
 }
