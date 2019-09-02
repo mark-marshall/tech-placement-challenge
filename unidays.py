@@ -52,11 +52,14 @@ class ItemValidator:
         """
         Checks to see whether a legitimate item is passed.
         """
+        # check whether the item has been included in the pricing rules
         if self.item not in self.pricingRules:
             self.itemInconsistences.append('noPricingRules')
+        # check that all relevant information has been included in the pricing rules
         elif self.item in self.pricingRules:
             self.itemPricingRules = self.pricingRules[self.item]
             self._CheckValidPricingRules()
+        # process any errors that are found in the checks
         self._RunErrorLogger()
 
 class Item:
@@ -255,4 +258,3 @@ class UnidaysDiscountChallenge:
 # TODO: Update tests for expanded item validator class
 # TODO: Update tests to include a different pricing rule and delivery rule config
 # TODO: Add print repr to basket/items that shows basket: item types with quantities
-
