@@ -5,7 +5,7 @@ from utils import errors, dependencyInjectionMap
 class _Item:
     def __init__(self, name, pricingRules):
         self.name = name
-        # unused quantity propery included for future-use
+        # unused quantity property included for completeness
         self.quantity = 0
         self.unitPrice = pricingRules['price']
         # the combined cost of all items of this type including discount
@@ -13,7 +13,7 @@ class _Item:
         # the price change associated with adding an item
         self.priceChange = 0
 
-    # ==== PRIVATE METHODS ====    
+    # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
         """
         Adds the full-price of an item onto the current total price.
@@ -45,9 +45,10 @@ class _Item:
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
         """
-        Starts the price calculation and returns the price change
-        associated with the added unit.
+        Increments the quantity of the item, calls the price calculation and 
+        returns the price change associated with the added unit.
         """
+        self._IncrementQuantity()
         self._CalculatePrice()
         return self.priceChange
 
@@ -59,10 +60,9 @@ class _DiscountableItem(_Item):
         # price of all items combined in a discount deal
         self.discountedPrice = pricingRules['discountedPrice']
         # number of items that have yet to be included in discounts
-        # stays at 0 if the item has no applicable discount rules
         self.discountCounter = 0
     
-    # ==== PRIVATE METHODS ====
+    # ==== PROTECTED METHODS ====
     def _ApplyDiscount(self):
         """
         Checks to see if a multi-buy discount can be applied and 
@@ -104,35 +104,40 @@ class _Basket:
         self.pricingRules = pricingRules
         self.items = {}
     
-    def _ItemInBasketCheck(self,item):
+    # ==== PROTECTED METHODS ====
+    def _ItemEligibleForBasket(self,item):
         """
-        Checks to see whether this item-type already exists in the basket,
-        return True in positive cases.
+        Checks to see whether the item-type is eligibile to be
+        added to the basket and return True in positive cases.
         """
         if item not in self.items:
             return True
     
-    def _AddItem(self, item):
+    # ==== PUBLIC METHODS ====
+    def AddItem(self, item):
         """
         Adds the item to the basket.
         """
         # check if this item type is already in the items dict
-        if self._ItemInBasketCheck(item):
+        if self._ItemEligibleForBasket(item):
             # determine which class the item should be created under
             classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
             # create the class for the item
             itemToAdd = classToCreate(item, self.pricingRules[item])
-            # add the newly created class to the items dict
+            # add the newly created class to the items dictionary
             self.items[item] = itemToAdd
         # get the price change for adding a unit of the item
         return self.items[item].PriceChange()
 
 class _Delivery:
     def __init__(self, deliveryRules):
-        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
+        # standard delivery charge without discount
         self.standardDeliveryCharge = deliveryRules['standard']
+        # value required to qualify for free delivery
+        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
     
-    def _CalculateDeliveryPrice(self, basketPrice):
+    # ==== PUBLIC METHODS ====
+    def CalculateDeliveryPrice(self, basketPrice):
         """
         Returns the delivery charge according to the delivery rules.
         """
@@ -152,7 +157,7 @@ class UnidaysDiscountChallenge:
             'DeliveryCharge': 0
         }
     
-    # ==== PRIVATE METHODS ====
+    # ==== PROTECTED METHODS ====
     def _HandleError(self, exitCode, errorMessage):
         """
         Takes an exitCode and an error string and handles the error.
@@ -170,29 +175,29 @@ class UnidaysDiscountChallenge:
     
     def _UpdateTotalPrice (self,priceChange):
         """
-        Updates the total price including any discounts.
+        Updates the total price.
         """
         self.price['Total'] += priceChange
 
     def _UpdateDeliveryCharge(self, deliveryCharge):
         """
-        Updates the delivery charge according to the delivery rules.
+        Updates the delivery charge.
         """
         self.price['DeliveryCharge'] = deliveryCharge
     
     # ==== PUBLIC METHODS ====
     def AddToBasket(self, item):
         """
-        Adds the item to the basket and calls the _UpdatePrice function.
+        Adds the item to the basket and updates charges.
         """
         # check to make sure pricing rules have been provided for the item
         self._CheckItemValidity(item)
         # add the item to the basket
-        priceChange = self.basket._AddItem(item)
+        priceChange = self.basket.AddItem(item)
         # update the checkout price
         self._UpdateTotalPrice(priceChange)
         # calculate the delivery price
-        deliveryCharge = self.delivery._CalculateDeliveryPrice(self.price['Total'])
+        deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
         # update the delivery price
         self._UpdateDeliveryCharge(deliveryCharge)
         
@@ -200,10 +205,13 @@ class UnidaysDiscountChallenge:
     def CalculateTotalPrice(self):
         """
         Returns the current price of the basket and the current delivery 
-        charge with all discounts are applied.
+        charge with all discounts applied.
         """
         return self.price
 
 
 # TODO: Work through comments and reword
-# TODO: Unhappy path when correct discount properties are not included in a discountable item
+# TODO: Sort out unused item quantity prop
+# TODO: add protect/private to correct properties on all classes
+# TODO: Abstract error logger class (method-only abstract class)
+# TODO: Unhappy path when correct discount properties are not included in a discountable item ---> _ItemValidator class?
