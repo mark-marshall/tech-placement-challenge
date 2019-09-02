@@ -1,18 +1,63 @@
 import sys
 
-from utils import errors, dependencyInjectionMap
+from config import errors, dependencyInjectionMap, itemValidatorMap
 
 class _ErrorLogger:
-    def __init__(self, errorMessage, exitCode):
-        self.errorMessage = errorMessage
+    def __init__(self, errorMessages, exitCode):
+        self.errorMessages = errorMessages
         self.exitCode = exitCode
 
+    # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
-        Takes an exitCode and an error string and handles the error.
+        Takes an exitCode and an array of errors to handle error
+        feedback.
         """
-        print(errors[self.errorMessage])
+        for error in self.errorMessages:
+            print(errors[error])
         sys.exit(self.exitCode)
+
+class _ItemValidator:
+    def __init__(self, item, pricingRules):
+        self.item = item
+        self.pricingRules = pricingRules
+        self.itemPricingRules = None
+        self.itemInconsistences = []
+
+    # ==== PROTECTED METHODS ====
+    def _RunErrorLogger(self):
+        """
+        Processes any inconsistences through the error logger.
+        """
+        if len(self.itemInconsistences) > 0:
+            errorLog = _ErrorLogger(self.itemInconsistences, 0)
+            errorLog.HandleError()
+    
+    def _CheckValidPricingRules(self):
+        """
+        Checks to see whether an item has the required pricing rules.
+        """
+        # check keys that need to be included for all items
+        for itemValidator in itemValidatorMap['allItems']:
+            if itemValidator not in self.itemPricingRules:
+                self.itemInconsistences.append(itemValidatorMap['allItems'][itemValidator])
+        # check keys that need to be included for this specific item
+        if self.itemPricingRules['status'] in itemValidatorMap:
+            for itemValidator in itemValidatorMap[self.itemPricingRules['status']]:
+                if itemValidator not in self.itemPricingRules:
+                    self.itemInconsistences.append(itemValidatorMap[self.itemPricingRules['status'][itemValidator]])
+
+    # ==== PUBLIC METHODS ====
+    def CheckValidity(self):
+        """
+        Checks to see whether a legitimate item is passed.
+        """
+        if self.item not in self.pricingRules:
+            self.itemInconsistences.append('noPricingRules')
+        elif self.item in self.pricingRules:
+            self.itemPricingRules = self.pricingRules[self.item]
+            self._CheckValidPricingRules()
+        self._RunErrorLogger()
 
 class _Item:
     def __init__(self, name, pricingRules):
@@ -169,16 +214,7 @@ class UnidaysDiscountChallenge:
             'DeliveryCharge': 0
         }
     
-    # ==== PROTECTED METHODS ====
-    def _CheckItemValidity(self, item):
-        """
-        Checks to see whether a legitimate item is passed with required
-        pricing rules, calls the error handler if otherwise.
-        """
-        if item not in self.pricingRules:
-            errorLog = _ErrorLogger('invalidItem', 0)
-            errorLog.HandleError()
-    
+    # ==== PROTECTED METHODS ====    
     def _UpdateTotalPrice (self,priceChange):
         """
         Updates the total price.
@@ -197,10 +233,11 @@ class UnidaysDiscountChallenge:
         Adds the item to the basket and updates charges.
         """
         # check to make sure pricing rules have been provided for the item
-        self._CheckItemValidity(item)
+        validator = _ItemValidator(item, self.pricingRules)
+        validator.CheckValidity()
         # add the item to the basket
         priceChange = self.basket.AddItem(item)
-        # update the checkout price
+        # update the checkout prices
         self._UpdateTotalPrice(priceChange)
         # calculate the delivery price
         deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
@@ -215,6 +252,6 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-
-# TODO: Abstract error logger class (method-only abstract class)
-# TODO: Unhappy path when correct discount properties are not included in a discountable item ---> _ItemValidator class?
+# TODO: Update tests for expanded item validator class
+# TODO: Update tests to include a different pricing rule and delivery rule config
+# TODO: Decide on _protected classes versus public classes
