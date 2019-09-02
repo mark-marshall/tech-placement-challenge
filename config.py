@@ -25,6 +25,6 @@ itemValidatorMap = {
 }
 
 dependencyInjectionMap = {
-        'notDiscountable': '_Item',
-        'Discountable': '_DiscountableItem'
+        'notDiscountable': 'Item',
+        'Discountable': 'DiscountableItem'
 }

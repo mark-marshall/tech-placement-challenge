@@ -2,7 +2,7 @@ import sys
 
 from config import errors, dependencyInjectionMap, itemValidatorMap
 
-class _ErrorLogger:
+class ErrorLogger:
     def __init__(self, errorMessages, exitCode):
         self.errorMessages = errorMessages
         self.exitCode = exitCode
@@ -17,7 +17,7 @@ class _ErrorLogger:
             print(errors[error])
         sys.exit(self.exitCode)
 
-class _ItemValidator:
+class ItemValidator:
     def __init__(self, item, pricingRules):
         self.item = item
         self.pricingRules = pricingRules
@@ -30,7 +30,7 @@ class _ItemValidator:
         Processes any inconsistences through the error logger.
         """
         if len(self.itemInconsistences) > 0:
-            errorLog = _ErrorLogger(self.itemInconsistences, 0)
+            errorLog = ErrorLogger(self.itemInconsistences, 0)
             errorLog.HandleError()
     
     def _CheckValidPricingRules(self):
@@ -59,7 +59,7 @@ class _ItemValidator:
             self._CheckValidPricingRules()
         self._RunErrorLogger()
 
-class _Item:
+class Item:
     def __init__(self, name, pricingRules):
         self.name = name
         # unused quantity property included for completeness
@@ -109,7 +109,7 @@ class _Item:
         self._CalculatePrice()
         return self.priceChange
 
-class _DiscountableItem(_Item):
+class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
         super().__init__(name, pricingRules)
         # number of items required to qualify for a discount
@@ -156,7 +156,7 @@ class _DiscountableItem(_Item):
         # calculate the final price change after adding the unit
         self._CalculatePriceChange(previousPrice)
 
-class _Basket:
+class Basket:
     def __init__(self, pricingRules):
         self.pricingRules = pricingRules
         self.items = {}
@@ -186,7 +186,7 @@ class _Basket:
         # get the price change for adding a unit of the item
         return self.items[item].PriceChange()
 
-class _Delivery:
+class Delivery:
     def __init__(self, deliveryRules):
         # standard delivery charge without discount
         self.standardDeliveryCharge = deliveryRules['standard']
@@ -207,8 +207,8 @@ class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
         self.pricingRules = pricingRules
         self.deliveryRules = deliveryRules
-        self.basket = _Basket(self.pricingRules)
-        self.delivery = _Delivery(self.deliveryRules)
+        self.basket = Basket(self.pricingRules)
+        self.delivery = Delivery(self.deliveryRules)
         self.price = {
             'Total': 0,
             'DeliveryCharge': 0
@@ -233,7 +233,7 @@ class UnidaysDiscountChallenge:
         Adds the item to the basket and updates charges.
         """
         # check to make sure pricing rules have been provided for the item
-        validator = _ItemValidator(item, self.pricingRules)
+        validator = ItemValidator(item, self.pricingRules)
         validator.CheckValidity()
         # add the item to the basket
         priceChange = self.basket.AddItem(item)
@@ -254,4 +254,3 @@ class UnidaysDiscountChallenge:
 
 # TODO: Update tests for expanded item validator class
 # TODO: Update tests to include a different pricing rule and delivery rule config
-# TODO: Decide on _protected classes versus public classes
