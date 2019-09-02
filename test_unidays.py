@@ -1,6 +1,6 @@
 import unittest
 from unidays import UnidaysDiscountChallenge
-from utils import pricingRules, deliveryRules
+from config import pricingRules, deliveryRules
 
 class Test(unittest.TestCase):
     def setUp(self):

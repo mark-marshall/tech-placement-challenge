@@ -1,11 +1,68 @@
 import sys
 
-from utils import errors, dependencyInjectionMap
+from config import errors, dependencyInjectionMap, itemValidatorMap
 
-class _Item:
+class ErrorLogger:
+    def __init__(self, errorMessages, exitCode):
+        self.errorMessages = errorMessages
+        self.exitCode = exitCode
+
+    # ==== PUBLIC METHODS ====
+    def HandleError(self):
+        """
+        Takes an exitCode and an array of errors to handle error
+        feedback.
+        """
+        for error in self.errorMessages:
+            print(errors[error])
+        sys.exit(self.exitCode)
+
+class ItemValidator:
+    def __init__(self, item, pricingRules):
+        self.item = item
+        self.pricingRules = pricingRules
+        self.itemPricingRules = None
+        self.itemInconsistences = []
+
+    # ==== PROTECTED METHODS ====
+    def _RunErrorLogger(self):
+        """
+        Processes any inconsistences through the error logger.
+        """
+        if len(self.itemInconsistences) > 0:
+            errorLog = ErrorLogger(self.itemInconsistences, 0)
+            errorLog.HandleError()
+    
+    def _CheckValidPricingRules(self):
+        """
+        Checks to see whether an item has the required pricing rules.
+        """
+        # check keys that need to be included for all items
+        for itemValidator in itemValidatorMap['allItems']:
+            if itemValidator not in self.itemPricingRules:
+                self.itemInconsistences.append(itemValidatorMap['allItems'][itemValidator])
+        # check keys that need to be included for this specific item
+        if self.itemPricingRules['status'] in itemValidatorMap:
+            for itemValidator in itemValidatorMap[self.itemPricingRules['status']]:
+                if itemValidator not in self.itemPricingRules:
+                    self.itemInconsistences.append(itemValidatorMap[self.itemPricingRules['status']][itemValidator])
+
+    # ==== PUBLIC METHODS ====
+    def CheckValidity(self):
+        """
+        Checks to see whether a legitimate item is passed.
+        """
+        if self.item not in self.pricingRules:
+            self.itemInconsistences.append('noPricingRules')
+        elif self.item in self.pricingRules:
+            self.itemPricingRules = self.pricingRules[self.item]
+            self._CheckValidPricingRules()
+        self._RunErrorLogger()
+
+class Item:
     def __init__(self, name, pricingRules):
         self.name = name
-        # unused quantity propery included for future-use
+        # unused quantity property included for completeness
         self.quantity = 0
         self.unitPrice = pricingRules['price']
         # the combined cost of all items of this type including discount
@@ -13,7 +70,7 @@ class _Item:
         # the price change associated with adding an item
         self.priceChange = 0
 
-    # ==== PRIVATE METHODS ====    
+    # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
         """
         Adds the full-price of an item onto the current total price.
@@ -45,13 +102,14 @@ class _Item:
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
         """
-        Starts the price calculation and returns the price change
-        associated with the added unit.
+        Increments the quantity of the item, calls the price calculation and 
+        returns the price change associated with the added unit.
         """
+        self._IncrementQuantity()
         self._CalculatePrice()
         return self.priceChange
 
-class _DiscountableItem(_Item):
+class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
         super().__init__(name, pricingRules)
         # number of items required to qualify for a discount
@@ -59,10 +117,9 @@ class _DiscountableItem(_Item):
         # price of all items combined in a discount deal
         self.discountedPrice = pricingRules['discountedPrice']
         # number of items that have yet to be included in discounts
-        # stays at 0 if the item has no applicable discount rules
         self.discountCounter = 0
     
-    # ==== PRIVATE METHODS ====
+    # ==== PROTECTED METHODS ====
     def _ApplyDiscount(self):
         """
         Checks to see if a multi-buy discount can be applied and 
@@ -99,98 +156,101 @@ class _DiscountableItem(_Item):
         # calculate the final price change after adding the unit
         self._CalculatePriceChange(previousPrice)
 
-class _Basket:
+class Basket:
     def __init__(self, pricingRules):
         self.pricingRules = pricingRules
         self.items = {}
     
-    def _ItemInBasketCheck(self,item):
+    # ==== PROTECTED METHODS ====
+    def _ItemEligibleForBasket(self,item):
         """
-        Checks to see whether this item-type already exists in the basket,
-        return True in positive cases.
+        Checks to see whether the item-type is eligibile to be
+        added to the basket and return True in positive cases.
         """
         if item not in self.items:
             return True
     
-    def _AddItem(self, item):
+    # ==== PUBLIC METHODS ====
+    def AddItem(self, item):
         """
         Adds the item to the basket.
         """
         # check if this item type is already in the items dict
-        if self._ItemInBasketCheck(item):
+        if self._ItemEligibleForBasket(item):
             # determine which class the item should be created under
             classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
             # create the class for the item
             itemToAdd = classToCreate(item, self.pricingRules[item])
-            # add the newly created class to the items dict
+            # add the newly created class to the items dictionary
             self.items[item] = itemToAdd
         # get the price change for adding a unit of the item
         return self.items[item].PriceChange()
 
+class Delivery:
+    def __init__(self, deliveryRules):
+        # standard delivery charge without discount
+        self.standardDeliveryCharge = deliveryRules['standard']
+        # value required to qualify for free delivery
+        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
+    
+    # ==== PUBLIC METHODS ====
+    def CalculateDeliveryPrice(self, basketPrice):
+        """
+        Returns the delivery charge according to the delivery rules.
+        """
+        if basketPrice >= self.freeDeliveryThreshold:
+            return 0
+        elif basketPrice < self.freeDeliveryThreshold:
+            return self.standardDeliveryCharge
+    
 class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
         self.pricingRules = pricingRules
-        self.standardDeliveryCharge = deliveryRules['standard']
-        self.freeDeliveryThreshold = deliveryRules['freeThreshold']
-        self.basket = _Basket(self.pricingRules)
+        self.deliveryRules = deliveryRules
+        self.basket = Basket(self.pricingRules)
+        self.delivery = Delivery(self.deliveryRules)
         self.price = {
             'Total': 0,
             'DeliveryCharge': 0
         }
     
-    # ==== PRIVATE METHODS ====
-    def _HandleError(self, exitCode, errorMessage):
-        """
-        Takes an exitCode and an error string and handles the error.
-        """
-        print(errors[errorMessage])
-        sys.exit(exitCode)
-
-    def _CheckItemValidity(self, item):
-        """
-        Checks to see whether a legitimate item is passed with required
-        pricing rules, calls the error handler if otherwise.
-        """
-        if item not in self.pricingRules:
-            self._HandleError(0, 'invalidItem')
-    
+    # ==== PROTECTED METHODS ====    
     def _UpdateTotalPrice (self,priceChange):
         """
-        Updates the total price including any discounts.
+        Updates the total price.
         """
         self.price['Total'] += priceChange
 
-    def _UpdateDeliveryCharge(self):
+    def _UpdateDeliveryCharge(self, deliveryCharge):
         """
-        Updates the delivery charge according to the delivery rules.
+        Updates the delivery charge.
         """
-        if self.price['Total'] >= self.freeDeliveryThreshold:
-            self.price['DeliveryCharge'] = 0
-        elif self.price['Total'] < self.freeDeliveryThreshold:
-            self.price['DeliveryCharge'] = self.standardDeliveryCharge
-
-    def _UpdatePrice(self, priceChange):
-        """
-        Calls all necessary price change functions.
-        """
-        self._UpdateTotalPrice(priceChange)
-        self._UpdateDeliveryCharge()
+        self.price['DeliveryCharge'] = deliveryCharge
     
     # ==== PUBLIC METHODS ====
     def AddToBasket(self, item):
         """
-        Adds the item to the basket and calls the _UpdatePrice function.
+        Adds the item to the basket and updates charges.
         """
         # check to make sure pricing rules have been provided for the item
-        self._CheckItemValidity(item)
+        validator = ItemValidator(item, self.pricingRules)
+        validator.CheckValidity()
         # add the item to the basket
-        priceChange = self.basket._AddItem(item)
-        # update the price
-        self._UpdatePrice(priceChange)
+        priceChange = self.basket.AddItem(item)
+        # update the checkout prices
+        self._UpdateTotalPrice(priceChange)
+        # calculate the delivery price
+        deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
+        # update the delivery price
+        self._UpdateDeliveryCharge(deliveryCharge)
+        
     
     def CalculateTotalPrice(self):
         """
         Returns the current price of the basket and the current delivery 
-        charge with all discounts are applied.
+        charge with all discounts applied.
         """
         return self.price
+
+# TODO: Update tests for expanded item validator class
+# TODO: Update tests to include a different pricing rule and delivery rule config
