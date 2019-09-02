@@ -2,6 +2,18 @@ import sys
 
 from utils import errors, dependencyInjectionMap
 
+class _ErrorLogger:
+    def __init__(self, errorMessage, exitCode):
+        self.errorMessage = errorMessage
+        self.exitCode = exitCode
+
+    def HandleError(self):
+        """
+        Takes an exitCode and an error string and handles the error.
+        """
+        print(errors[self.errorMessage])
+        sys.exit(self.exitCode)
+
 class _Item:
     def __init__(self, name, pricingRules):
         self.name = name
@@ -158,20 +170,14 @@ class UnidaysDiscountChallenge:
         }
     
     # ==== PROTECTED METHODS ====
-    def _HandleError(self, exitCode, errorMessage):
-        """
-        Takes an exitCode and an error string and handles the error.
-        """
-        print(errors[errorMessage])
-        sys.exit(exitCode)
-
     def _CheckItemValidity(self, item):
         """
         Checks to see whether a legitimate item is passed with required
         pricing rules, calls the error handler if otherwise.
         """
         if item not in self.pricingRules:
-            self._HandleError(0, 'invalidItem')
+            errorLog = _ErrorLogger('invalidItem', 0)
+            errorLog.HandleError()
     
     def _UpdateTotalPrice (self,priceChange):
         """
@@ -210,8 +216,5 @@ class UnidaysDiscountChallenge:
         return self.price
 
 
-# TODO: Work through comments and reword
-# TODO: Sort out unused item quantity prop
-# TODO: add protect/private to correct properties on all classes
 # TODO: Abstract error logger class (method-only abstract class)
 # TODO: Unhappy path when correct discount properties are not included in a discountable item ---> _ItemValidator class?
