@@ -4,7 +4,7 @@ from config import pricingRules, deliveryRules
 # ==============================================================
 # ===== Change itemsToAdd to test different configurations =====
 # ==============================================================
-itemsToAdd = ['A','B','B','C','C','C','D','D','E','E']
+itemsToAdd = ['A','B','B','B','B','C', 'C', 'C', 'C','D','D']
 
 class RunUnidays:
     def __init__(self, checkout, itemsToAdd):
@@ -28,7 +28,7 @@ class RunUnidays:
             self.detailedBasket[item] = {
             'quantity': checkout.basket.items[item].quantity,
             'unitPrice': checkout.basket.items[item].unitPrice,
-            'itemSavings': checkout.basket.items[item].savings,
+            'itemSavings': checkout.basket.items[item].totalItemSavings,
             'finalCost': checkout.basket.items[item].totalItemPrice
             }
     

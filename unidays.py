@@ -72,7 +72,9 @@ class Item:
         # the price change associated with adding an item
         self.priceChange = 0
         # savings associated with this item type
-        self.savings = 0
+        self.totalItemSavings = 0
+        # the savings associated  with adding an item
+        self.savingsChange = 0
 
     # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
@@ -111,7 +113,7 @@ class Item:
         """
         self._IncrementQuantity()
         self._CalculatePrice()
-        return {'priceChange': self.priceChange, 'savings': self.savings}
+        return {'priceChange': self.priceChange, 'savings': self.savingsChange}
 
 class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
@@ -139,7 +141,7 @@ class DiscountableItem(Item):
             self.totalItemPrice -= (self.unitPrice * self.discountFrequency)
             self.totalItemPrice += self.discountedPrice
             # update the cumulative savings associated with this item type
-            self.savings += ((self.unitPrice * self.discountFrequency) - self.discountedPrice)
+            self.totalItemSavings += ((self.unitPrice * self.discountFrequency) - self.discountedPrice)
 
     def _CalculatePriceChange(self, previousPrice):
         """
@@ -148,6 +150,13 @@ class DiscountableItem(Item):
         """
         self.priceChange = self.totalItemPrice - previousPrice
     
+    def _CalculateSavingsChange(self, previousSavings):
+        """
+        Updates the savings change property with the latest savings change 
+        after adding a new unit.
+        """
+        self.savingsChange = self.totalItemSavings - previousSavings
+    
     def _CalculatePrice(self):
         """
         Calls all necessary functions to update the price with all 
@@ -155,12 +164,16 @@ class DiscountableItem(Item):
         """
         # hold the previous price for the price change calculation
         previousPrice = self.totalItemPrice
+        # hold the previous savings for the savings change calculation
+        previousSavings = self.totalItemSavings
         # increment the price with the full-price of the item
         self._IncrementFullPrice()
         # check for and apply discounts
         self._ApplyDiscount()
         # calculate the final price change after adding the unit
         self._CalculatePriceChange(previousPrice)
+        # calculate the final saving changes after adding the unit
+        self._CalculateSavingsChange(previousSavings)
 
 class Basket:
     def __init__(self, pricingRules):
@@ -250,11 +263,11 @@ class UnidaysDiscountChallenge:
         validator.CheckValidity()
         # add the item to the basket
         itemAddedRes = self.basket.AddItem(item)
-        # update the checkout price
+        # update the total price
         self._UpdateTotalPrice(itemAddedRes['priceChange'])
-        # update the savings price
+        # update the savings value
         self._UpdateTotalSavings(itemAddedRes['savings'])
-        # calculate the delivery price
+        # calculate the delivery charge
         deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
         # update the delivery price
         self._UpdateDeliveryCharge(deliveryCharge)
@@ -266,5 +279,4 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Add tests for savings
 # TODO: STRETCH: Create and deploy Flask API
