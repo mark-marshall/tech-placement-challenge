@@ -12,11 +12,11 @@ deliveryRules = {
         }
 
 errors = {
-    'noPricingRules': 'ERROR: An item was passed that has not been included in the pricing rules for UnidaysDiscountChallenge',
-    'noPrice': 'ERROR: An item was passed without a price property',
-    'noStatus': 'ERROR: An item was passed witout a status property',
-    'noDiscountFrequency': 'ERROR: A dicountable item was passed without a discountFrequency property',
-    'noDiscountedPrice': 'ERROR: A discountable item was passed without a discountedPrice property'
+    'noPricingRules': 'ERROR: An item was passed that has not been included in the pricing rules.',
+    'noPrice': 'ERROR: An item was passed without a price property.',
+    'noStatus': 'ERROR: An item was passed witout a status property.',
+    'noDiscountFrequency': 'ERROR: A dicountable item was passed without a discountFrequency property.',
+    'noDiscountedPrice': 'ERROR: A discountable item was passed without a discountedPrice property.'
 }
 
 itemValidatorMap = {
