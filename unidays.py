@@ -1,6 +1,6 @@
 import sys
 
-from config import errors, dependencyInjectionMap, itemValidatorMap
+from config import errors, classInjectionMap, itemValidatorMap
 
 class ErrorLogger:
     def __init__(self, errorMessages, exitCode):
@@ -10,8 +10,8 @@ class ErrorLogger:
     # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
-        Takes an exitCode and an array of errors to handle error
-        feedback.
+        Prints each error message and executes the system
+        exit.
         """
         for error in self.errorMessages:
             print(errors[error])
@@ -42,7 +42,7 @@ class ItemValidator:
             if itemValidator not in self.itemPricingRules:
                 self.itemInconsistences.append(itemValidatorMap['allItems'][itemValidator])
         # check keys that need to be included for this specific item
-        if self.itemPricingRules['status'] in itemValidatorMap:
+        if ('status' in self.itemPricingRules) and (self.itemPricingRules['status'] in itemValidatorMap):
             for itemValidator in itemValidatorMap[self.itemPricingRules['status']]:
                 if itemValidator not in self.itemPricingRules:
                     self.itemInconsistences.append(itemValidatorMap[self.itemPricingRules['status']][itemValidator])
@@ -52,23 +52,28 @@ class ItemValidator:
         """
         Checks to see whether a legitimate item is passed.
         """
+        # check whether the item has been included in the pricing rules
         if self.item not in self.pricingRules:
             self.itemInconsistences.append('noPricingRules')
+        # check that all relevant information has been included in the pricing rules
         elif self.item in self.pricingRules:
             self.itemPricingRules = self.pricingRules[self.item]
             self._CheckValidPricingRules()
+        # process any errors that are found in the checks
         self._RunErrorLogger()
 
 class Item:
     def __init__(self, name, pricingRules):
         self.name = name
-        # unused quantity property included for completeness
         self.quantity = 0
         self.unitPrice = pricingRules['price']
         # the combined cost of all items of this type including discount
         self.totalItemPrice = 0
         # the price change associated with adding an item
         self.priceChange = 0
+    
+    def __str__(self):
+        return f"{self.quantity} x {self.name} = {self.totalItemPrice}"
 
     # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
@@ -102,8 +107,8 @@ class Item:
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
         """
-        Increments the quantity of the item, calls the price calculation and 
-        returns the price change associated with the added unit.
+        Calls the price calculation and returns the price change 
+        associated with the added unit.
         """
         self._IncrementQuantity()
         self._CalculatePrice()
@@ -160,6 +165,9 @@ class Basket:
     def __init__(self, pricingRules):
         self.pricingRules = pricingRules
         self.items = {}
+
+    def __str__(self):
+        return f"Basket: {self.items}"
     
     # ==== PROTECTED METHODS ====
     def _ItemEligibleForBasket(self,item):
@@ -178,7 +186,7 @@ class Basket:
         # check if this item type is already in the items dict
         if self._ItemEligibleForBasket(item):
             # determine which class the item should be created under
-            classToCreate = eval(dependencyInjectionMap[self.pricingRules[item]['status']])
+            classToCreate = eval(classInjectionMap[self.pricingRules[item]['status']])
             # create the class for the item
             itemToAdd = classToCreate(item, self.pricingRules[item])
             # add the newly created class to the items dictionary
@@ -244,7 +252,6 @@ class UnidaysDiscountChallenge:
         # update the delivery price
         self._UpdateDeliveryCharge(deliveryCharge)
         
-    
     def CalculateTotalPrice(self):
         """
         Returns the current price of the basket and the current delivery 
@@ -252,5 +259,6 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Update tests for expanded item validator class
-# TODO: Update tests to include a different pricing rule and delivery rule config
+# TODO: Format output on run_unidays.py and possible API
+# TODO: Track total discount
+# TODO: STRETCH: Create and deploy Flask APIs

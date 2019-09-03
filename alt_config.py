@@ -1,14 +1,14 @@
-pricingRules = {
-        'A': {'price': 8, 'status': 'notDiscountable'},
-        'B': {'price': 12, 'status': 'Discountable', 'discountFrequency': 2, 'discountedPrice': 20},
-        'C': {'price': 4, 'status': 'Discountable', 'discountFrequency': 3, 'discountedPrice': 10},
-        'D': {'price': 7, 'status': 'Discountable', 'discountFrequency': 2,'discountedPrice': 7},
-        'E': {'price': 5, 'status': 'Discountable', 'discountFrequency': 3, 'discountedPrice': 10},
+pricingRulesAlt = {
+        'F': {'price': 15, 'status': 'notDiscountable'},
+        'G': {'price': 10, 'status': 'Discountable', 'discountFrequency': 5, 'discountedPrice': 40},
+        'H': {'price': 1, 'status': 'Discountable', 'discountFrequency': 30, 'discountedPrice': 20},
+        'I': {'price': 7},
+        'J': {'price': 5, 'status': 'Discountable', 'discountFrequency': 3},
         }
 
-deliveryRules = {
-        'standard': 7,
-        'freeThreshold': 50
+deliveryRulesAlt = {
+        'standard': 25,
+        'freeThreshold': 45
         }
 
 errors = {
