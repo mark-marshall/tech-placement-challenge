@@ -10,8 +10,8 @@ class ErrorLogger:
     # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
-        Takes an exitCode and an array of errors to handle error
-        feedback.
+        prints each error message and executes the system
+        exit.
         """
         for error in self.errorMessages:
             print(errors[error])
@@ -65,7 +65,6 @@ class ItemValidator:
 class Item:
     def __init__(self, name, pricingRules):
         self.name = name
-        # unused quantity property included for completeness
         self.quantity = 0
         self.unitPrice = pricingRules['price']
         # the combined cost of all items of this type including discount
@@ -105,8 +104,8 @@ class Item:
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
         """
-        Increments the quantity of the item, calls the price calculation and 
-        returns the price change associated with the added unit.
+        Calls the price calculation and returns the price change 
+        associated with the added unit.
         """
         self._IncrementQuantity()
         self._CalculatePrice()
@@ -247,7 +246,6 @@ class UnidaysDiscountChallenge:
         # update the delivery price
         self._UpdateDeliveryCharge(deliveryCharge)
         
-    
     def CalculateTotalPrice(self):
         """
         Returns the current price of the basket and the current delivery 
@@ -257,4 +255,5 @@ class UnidaysDiscountChallenge:
 
 # TODO: Update tests for expanded item validator class
 # TODO: Update tests to include a different pricing rule and delivery rule config
-# TODO: Add print repr to basket/items that shows basket: item types with quantities
+# TODO: Add print repr to basket/items that shows basket: item types with quantities -> used in run and flask api
+# TODO: Create and deploy Flask APIs
