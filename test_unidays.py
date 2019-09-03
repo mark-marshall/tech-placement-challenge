@@ -1,11 +1,14 @@
 import unittest
 from unidays import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
+from alt_config import pricingRulesAlt, deliveryRulesAlt
 
 class Test(unittest.TestCase):
     def setUp(self):
         self.pricingRules = pricingRules
         self.deliveryRules = deliveryRules
+        self.pricingRulesAlt = pricingRulesAlt
+        self.deliveryRulesAlt = deliveryRulesAlt 
     
     def test_empty_basket(self):
         """
@@ -22,6 +25,16 @@ class Test(unittest.TestCase):
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         with self.assertRaises(SystemExit) as status:
             priceCalculator.AddToBasket('Z')
+        self.assertEqual(status.exception.code, 0)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        with self.assertRaises(SystemExit) as status:
+            priceCalculator.AddToBasket('I')
+        self.assertEqual(status.exception.code, 0)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        with self.assertRaises(SystemExit) as status:
+            priceCalculator.AddToBasket('J')
         self.assertEqual(status.exception.code, 0)
 
     def test_non_dicounts(self):
@@ -47,7 +60,26 @@ class Test(unittest.TestCase):
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 10)
-    
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['F','F', 'F']
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['Total'], 45)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['G','G', 'G', 'G']
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['Total'], 40)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['H'] * 12
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['Total'], 12)
+
+
     def test_discounts(self):
         """
         Tests 'Total' for a variety of baskets in which discounts are applied
@@ -100,6 +132,18 @@ class Test(unittest.TestCase):
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 55)
 
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['G','G','G','G','G']
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['Total'], 40)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['H'] * 30
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['Total'], 20)
+
     def test_paid_delivery(self):
         """
         Tests 'DeliveryCharge' for a variety of baskets in which the delivery fee is not waived
@@ -113,6 +157,10 @@ class Test(unittest.TestCase):
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['DeliveryCharge'], 7)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        priceCalculator.AddToBasket('F')
+        self.assertEqual(priceCalculator.price['DeliveryCharge'], 25)
 
     def test_free_delivery(self):
         """
@@ -132,6 +180,12 @@ class Test(unittest.TestCase):
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         itemsToAdd = ['E','D','C','B','A','E','D','C','B','C']
+        for item in itemsToAdd:
+            priceCalculator.AddToBasket(item)
+        self.assertEqual(priceCalculator.price['DeliveryCharge'], 0)
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        itemsToAdd = ['G'] * 6
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['DeliveryCharge'], 0)

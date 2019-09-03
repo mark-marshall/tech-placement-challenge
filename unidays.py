@@ -42,7 +42,7 @@ class ItemValidator:
             if itemValidator not in self.itemPricingRules:
                 self.itemInconsistences.append(itemValidatorMap['allItems'][itemValidator])
         # check keys that need to be included for this specific item
-        if self.itemPricingRules['status'] in itemValidatorMap:
+        if ('status' in self.itemPricingRules) and (self.itemPricingRules['status'] in itemValidatorMap):
             for itemValidator in itemValidatorMap[self.itemPricingRules['status']]:
                 if itemValidator not in self.itemPricingRules:
                     self.itemInconsistences.append(itemValidatorMap[self.itemPricingRules['status']][itemValidator])
