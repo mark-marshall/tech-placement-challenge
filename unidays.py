@@ -259,6 +259,5 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Format output on run_unidays.py and possible API
-# TODO: Track total discount
-# TODO: STRETCH: Create and deploy Flask APIs
+# TODO: Track total discount and include in run_unidays output
+# TODO: STRETCH: Create and deploy Flask API
