@@ -10,7 +10,7 @@ class ErrorLogger:
     # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
-        prints each error message and executes the system
+        Prints each error message and executes the system
         exit.
         """
         for error in self.errorMessages:
