@@ -28,6 +28,7 @@ class RunUnidays:
             self.detailedBasket[item] = {
             'quantity': checkout.basket.items[item].quantity,
             'unitPrice': checkout.basket.items[item].unitPrice,
+            'itemSavings': checkout.basket.items[item].savings,
             'finalCost': checkout.basket.items[item].totalItemPrice
             }
     

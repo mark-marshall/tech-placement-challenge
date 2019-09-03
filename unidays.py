@@ -71,6 +71,8 @@ class Item:
         self.totalItemPrice = 0
         # the price change associated with adding an item
         self.priceChange = 0
+        # savings associated with this item type
+        self.savings = 0
 
     # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
@@ -109,7 +111,7 @@ class Item:
         """
         self._IncrementQuantity()
         self._CalculatePrice()
-        return self.priceChange
+        return {'priceChange': self.priceChange, 'savings': self.savings}
 
 class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
@@ -136,6 +138,8 @@ class DiscountableItem(Item):
             # remove full prices and replace with the discounted value
             self.totalItemPrice -= (self.unitPrice * self.discountFrequency)
             self.totalItemPrice += self.discountedPrice
+            # update the cumulative savings associated with this item type
+            self.savings += ((self.unitPrice * self.discountFrequency) - self.discountedPrice)
 
     def _CalculatePriceChange(self, previousPrice):
         """
@@ -213,15 +217,22 @@ class UnidaysDiscountChallenge:
         self.delivery = Delivery(self.deliveryRules)
         self.price = {
             'Total': 0,
+            'Savings': 0,
             'DeliveryCharge': 0
         }
     
-    # ==== PROTECTED METHODS ====    
-    def _UpdateTotalPrice (self,priceChange):
+    # ==== PROTECTED METHODS ====
+    def _UpdateTotalPrice(self,priceChange):
         """
         Updates the total price.
         """
         self.price['Total'] += priceChange
+    
+    def _UpdateTotalSavings(self, newSavings):
+        """
+        Updates the total savings.
+        """
+        self.price['Savings'] += newSavings
 
     def _UpdateDeliveryCharge(self, deliveryCharge):
         """
@@ -238,9 +249,11 @@ class UnidaysDiscountChallenge:
         validator = ItemValidator(item, self.pricingRules)
         validator.CheckValidity()
         # add the item to the basket
-        priceChange = self.basket.AddItem(item)
-        # update the checkout prices
-        self._UpdateTotalPrice(priceChange)
+        itemAddedRes = self.basket.AddItem(item)
+        # update the checkout price
+        self._UpdateTotalPrice(itemAddedRes['priceChange'])
+        # update the savings price
+        self._UpdateTotalSavings(itemAddedRes['savings'])
         # calculate the delivery price
         deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
         # update the delivery price
@@ -253,5 +266,5 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Track total discount and include in run_unidays output
+# TODO: Add tests for savings
 # TODO: STRETCH: Create and deploy Flask API
