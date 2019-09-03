@@ -71,6 +71,9 @@ class Item:
         self.totalItemPrice = 0
         # the price change associated with adding an item
         self.priceChange = 0
+    
+    def __str__(self):
+        return f"{self.quantity} x {self.name} = {self.totalItemPrice}"
 
     # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
@@ -162,6 +165,9 @@ class Basket:
     def __init__(self, pricingRules):
         self.pricingRules = pricingRules
         self.items = {}
+
+    def __str__(self):
+        return f"Basket: {self.items}"
     
     # ==== PROTECTED METHODS ====
     def _ItemEligibleForBasket(self,item):
@@ -253,7 +259,6 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Update tests for expanded item validator class
-# TODO: Update tests to include a different pricing rule and delivery rule config
-# TODO: Add print repr to basket/items that shows basket: item types with quantities -> used in run and flask api
-# TODO: Create and deploy Flask APIs
+# TODO: Format output on run_unidays.py and possible API
+# TODO: Track total discount
+# TODO: STRETCH: Create and deploy Flask APIs

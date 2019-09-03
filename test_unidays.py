@@ -12,7 +12,7 @@ class Test(unittest.TestCase):
     
     def test_empty_basket(self):
         """
-        Tests 'Total' and 'DeliveryCharge' for empty baskets
+        Tests 'Total' and 'DeliveryCharge' for empty baskets.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         self.assertEqual(priceCalculator.price['Total'], 0)
@@ -39,7 +39,8 @@ class Test(unittest.TestCase):
 
     def test_non_dicounts(self):
         """
-        Tests 'Total' for a variety of baskets in which no discounts are applied
+        Tests 'Total' for a variety of baskets in which no 
+        discounts are applied.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         priceCalculator.AddToBasket('A')
@@ -82,7 +83,8 @@ class Test(unittest.TestCase):
 
     def test_discounts(self):
         """
-        Tests 'Total' for a variety of baskets in which discounts are applied
+        Tests 'Total' for a variety of baskets in which discounts 
+        are applied.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         itemsToAdd = ['B','B']
@@ -146,7 +148,8 @@ class Test(unittest.TestCase):
 
     def test_paid_delivery(self):
         """
-        Tests 'DeliveryCharge' for a variety of baskets in which the delivery fee is not waived
+        Tests 'DeliveryCharge' for a variety of baskets in which 
+        the delivery fee is not waived.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         priceCalculator.AddToBasket('A')
@@ -164,7 +167,8 @@ class Test(unittest.TestCase):
 
     def test_free_delivery(self):
         """
-        Tests 'DeliveryCharge' for a variety of baskets in which the delivery fee is waived
+        Tests 'DeliveryCharge' for a variety of baskets in which
+        the delivery fee is waived.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
         itemsToAdd = ['B','B','B','B','C','C','C']
