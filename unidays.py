@@ -71,9 +71,6 @@ class Item:
         self.totalItemPrice = 0
         # the price change associated with adding an item
         self.priceChange = 0
-    
-    def __str__(self):
-        return f"{self.quantity} x {self.name} = {self.totalItemPrice}"
 
     # ==== PROTECTED METHODS ====    
     def _IncrementFullPrice(self):
@@ -165,9 +162,6 @@ class Basket:
     def __init__(self, pricingRules):
         self.pricingRules = pricingRules
         self.items = {}
-
-    def __str__(self):
-        return f"Basket: {self.items}"
     
     # ==== PROTECTED METHODS ====
     def _ItemEligibleForBasket(self,item):

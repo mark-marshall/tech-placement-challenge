@@ -45,9 +45,9 @@ class RunUnidays:
         """
         Runs all required functions to return the checkout response.
         """
-        self.AddItems()
-        self.PopulateBasket()
-        return self.Response()
+        self._AddItems()
+        self._PopulateBasket()
+        return self._Response()
     
 checkout = UnidaysDiscountChallenge(pricingRules,deliveryRules)
 run = RunUnidays(checkout, itemsToAdd)
