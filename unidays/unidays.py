@@ -113,7 +113,7 @@ class Item:
         """
         self._IncrementQuantity()
         self._CalculatePrice()
-        return {'priceChange': self.priceChange, 'savings': self.savingsChange}
+        return {'priceChange': self.priceChange, 'savingsChange': self.savingsChange}
 
 class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
@@ -241,11 +241,11 @@ class UnidaysDiscountChallenge:
         """
         self.price['Total'] += priceChange
     
-    def _UpdateTotalSavings(self, newSavings):
+    def _UpdateTotalSavings(self, savingsChange):
         """
         Updates the total savings.
         """
-        self.price['Savings'] += newSavings
+        self.price['Savings'] += savingsChange
 
     def _UpdateDeliveryCharge(self, deliveryCharge):
         """
@@ -266,7 +266,7 @@ class UnidaysDiscountChallenge:
         # update the total price
         self._UpdateTotalPrice(itemAddedRes['priceChange'])
         # update the savings value
-        self._UpdateTotalSavings(itemAddedRes['savings'])
+        self._UpdateTotalSavings(itemAddedRes['savingsChange'])
         # calculate the delivery charge
         deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
         # update the delivery price
@@ -274,9 +274,10 @@ class UnidaysDiscountChallenge:
         
     def CalculateTotalPrice(self):
         """
-        Returns the current price of the basket and the current delivery 
-        charge with all discounts applied.
+        Returns the current price of the basket and the current 
+        delivery charge with all discounts applied.
         """
         return self.price
 
+# TODO: Sort folder structure, add gitignore, pipfile (flask is coming) and rename readmes in prep for documentation/approach
 # TODO: STRETCH: Create and deploy Flask API
