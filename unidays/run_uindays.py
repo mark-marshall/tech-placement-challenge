@@ -1,10 +1,7 @@
 from unidays import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
 
-# ==============================================================
-# ===== Change itemsToAdd to test different configurations =====
-# ==============================================================
-itemsToAdd = ['A','B','B','B','B','C', 'C', 'C', 'C','D','D']
+itemsToAdd = list(str(input("Type all items to be added here: ")).upper())
 
 class RunUnidays:
     def __init__(self, checkout, itemsToAdd):
