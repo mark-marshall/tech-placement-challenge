@@ -279,5 +279,5 @@ class UnidaysDiscountChallenge:
         """
         return self.price
 
-# TODO: Sort folder structure, add gitignore, pipfile (flask is coming) and rename readmes in prep for documentation/approach
+# TODO: Sort key order alphabetically for returned basket
 # TODO: STRETCH: Create and deploy Flask API
