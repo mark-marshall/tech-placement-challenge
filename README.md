@@ -1,4 +1,4 @@
-# UNiDAYS Discounts Coding Challenge
+# UNiDAYS Discounts Coding Challenge Response
 
 ## Run Instructions
 
