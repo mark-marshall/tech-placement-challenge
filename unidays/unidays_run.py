@@ -1,21 +1,26 @@
-from unidays import UnidaysDiscountChallenge
-from config import pricingRules, deliveryRules
-
-itemsToAdd = list(str(input("Type all items to be added here: ")).upper())
-
 class RunUnidays:
     def __init__(self, checkout, itemsToAdd):
         self.checkout = checkout
         self.itemsToAdd = itemsToAdd
         self.detailedBasket = {}
+        self.errors = {}
     
     # ==== PROTECTED METHODS ====
+    def _HandleError(self, item, itemErrors):
+        """
+        Adds all errors to the errors dictionary.
+        """
+        if item not in self.errors:
+            self.errors[f"Item {item}"] = [itemErrors]
+
     def _AddItems(self):
         """
         Adds all items to the checkout.
         """
         for item in self.itemsToAdd:
-            self.checkout.AddToBasket(item)
+            itemErrors = self.checkout.AddToBasket(item)
+            if itemErrors:
+                self._HandleError(item, itemErrors)
 
     def _PopulateBasket(self):
         """
@@ -23,19 +28,21 @@ class RunUnidays:
         """
         for item in self.checkout.basket.items:
             self.detailedBasket[item] = {
-            'quantity': checkout.basket.items[item].quantity,
-            'unitPrice': checkout.basket.items[item].unitPrice,
-            'itemSavings': checkout.basket.items[item].totalItemSavings,
-            'finalCost': checkout.basket.items[item].totalItemPrice
+            'quantity': self.checkout.basket.items[item].quantity,
+            'unitPrice': self.checkout.basket.items[item].unitPrice,
+            'itemSavings': self.checkout.basket.items[item].totalItemSavings,
+            'finalCost': self.checkout.basket.items[item].totalItemPrice
             }
     
     def _Response(self):
         """
         Combines the final pricing object with detailed basket 
-        object.
+        object and any errors.
         """
         res = self.checkout.CalculateTotalPrice()
         res['Basket'] = self.detailedBasket
+        if len(self.errors) > 0:
+            res['Errors'] = self.errors
         return res
 
     # ==== PUBLIC METHODS ====
@@ -46,7 +53,3 @@ class RunUnidays:
         self._AddItems()
         self._PopulateBasket()
         return self._Response()
-    
-checkout = UnidaysDiscountChallenge(pricingRules,deliveryRules)
-run = RunUnidays(checkout, itemsToAdd)
-print(run.All())

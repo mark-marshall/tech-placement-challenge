@@ -1,7 +1,8 @@
 import unittest
 from unidays import UnidaysDiscountChallenge
+from utils import errors
 from config import pricingRules, deliveryRules
-from alt_config import pricingRulesAlt, deliveryRulesAlt
+from config_alt import pricingRulesAlt, deliveryRulesAlt
 
 class Test(unittest.TestCase):
     def setUp(self):
@@ -20,22 +21,19 @@ class Test(unittest.TestCase):
     
     def test_invalid_item(self):
         """
-        Tests for a sys exit when an invalidItem is passed.
+        Tests for the correct error response when an invalidItem is passed.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('Z')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('Z')['noPricingRules'], errors['noPricingRules'])
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('I')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('I')['noStatus'], errors['noStatus'])
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('J')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('J')['noDiscountFrequency'], errors['noDiscountFrequency'])
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        self.assertEqual(priceCalculator.AddToBasket('J')['noDiscountedPrice'], errors['noDiscountedPrice'])
 
     def test_non_dicounts_total(self):
         """
@@ -47,7 +45,7 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Total'], 8)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['A','A','A','A']
+        itemsToAdd = ['A'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 32)
@@ -57,19 +55,19 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Total'], 12)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E']
+        itemsToAdd = ['E'] * 2
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 10)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['F','F', 'F']
+        itemsToAdd = ['F'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 45)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['G','G', 'G', 'G']
+        itemsToAdd = ['G'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 40)
@@ -90,7 +88,7 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Savings'], 0)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['A','A','A','A']
+        itemsToAdd = ['A'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 0)
@@ -100,19 +98,19 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Savings'], 0)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E']
+        itemsToAdd = ['E'] * 2
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'],0)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['F','F', 'F']
+        itemsToAdd = ['F'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 0)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['G','G', 'G', 'G']
+        itemsToAdd = ['G'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 0)
@@ -129,31 +127,31 @@ class Test(unittest.TestCase):
         are applied.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['B','B']
+        itemsToAdd = ['B'] * 2
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 20)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['C','C','C']
+        itemsToAdd = ['C'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 10)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['D','D','D','D','D','D','D','D','D','D','D','D','D','D']
+        itemsToAdd = ['D'] * 14
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 49)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E','E']
+        itemsToAdd = ['E'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 10)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E','E','E']
+        itemsToAdd = ['E'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 15)
@@ -177,7 +175,7 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Total'], 55)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['G','G','G','G','G']
+        itemsToAdd = ['G'] * 5
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Total'], 40)
@@ -194,13 +192,13 @@ class Test(unittest.TestCase):
         are acheived.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['B','B']
+        itemsToAdd = ['B'] * 2
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 4)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['C','C','C']
+        itemsToAdd = ['C'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 2)
@@ -212,13 +210,13 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Savings'], 49)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E','E']
+        itemsToAdd = ['E'] * 3
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 5)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['E','E','E','E']
+        itemsToAdd = ['E'] * 4
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 5)
@@ -242,7 +240,7 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['Savings'], 13)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        itemsToAdd = ['G','G','G','G','G']
+        itemsToAdd = ['G'] * 5
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['Savings'], 10)
@@ -263,7 +261,7 @@ class Test(unittest.TestCase):
         self.assertEqual(priceCalculator.price['DeliveryCharge'], 7)
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        itemsToAdd = ['D','D','D','D','D','D','D','D','D','D','D','D','D','D']
+        itemsToAdd = ['D'] * 14
         for item in itemsToAdd:
             priceCalculator.AddToBasket(item)
         self.assertEqual(priceCalculator.price['DeliveryCharge'], 7)
