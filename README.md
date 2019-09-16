@@ -1,11 +1,11 @@
-# UNiDAYS Discounts Coding Challenge Response
+# UNiDAYS Discounts Coding Challenge
 
-## Sections
-[Challenge](#Challenge) . 
-[Running](#Running) . 
+## Contents
+[Introduction](#Introduction) . 
+[How to Run](#How to Run) . 
 [Approach](#Approach) . 
 
-## Challenge
+## Introduction
 
 This challenge is for you to make use of your problem solving skills as well as demonstrate your understanding of good object-oriented programming and SOLID design principles.
 
@@ -38,6 +38,6 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
     - `Total` - Total price of all items after applying any discounts
     - `DeliveryCharge` - The delivery charge for the order
 
-## Running
+## How to Run
 
 ## Approach
