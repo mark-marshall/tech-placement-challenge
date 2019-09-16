@@ -5,7 +5,7 @@ class ErrorLogger:
         self.errorMessages = errorMessages
 
     # ==== PUBLIC METHODS ====
-    def FormatError(self):
+    def HandleError(self):
         """
         Formats all errors into an errorTree and returns them.
         """
@@ -28,7 +28,7 @@ class ItemValidator:
         """
         if len(self.itemInconsistences) > 0:
             errorLog = ErrorLogger(self.itemInconsistences)
-            return errorLog.FormatError()
+            return errorLog.HandleError()
     
     def _CheckValidPricingRules(self):
         """
