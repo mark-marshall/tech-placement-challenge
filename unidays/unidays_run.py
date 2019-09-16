@@ -11,7 +11,7 @@ class RunUnidays:
         Adds all errors to the errors dictionary.
         """
         if item not in self.errors:
-            self.errors[f"Item {item}"] = [itemErrors]
+            self.errors[item] = itemErrors
 
     def _AddItems(self):
         """

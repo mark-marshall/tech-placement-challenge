@@ -31,17 +31,11 @@ def server_check():
 @path: '/price'
 @params: none
 @query: none
-@body: {"items": "abbbbccccz"}
+@body: {"items": "bbbbccccz"}
 @response: 
 Success (status 200)
 {
     "Basket": {
-        "A": {
-            "finalCost": 8,
-            "itemSavings": 0,
-            "quantity": 1,
-            "unitPrice": 8
-        },
         "B": {
             "finalCost": 40,
             "itemSavings": 8,

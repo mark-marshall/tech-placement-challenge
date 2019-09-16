@@ -7,12 +7,12 @@ class ErrorLogger:
     # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
-        Formats all errors into an errorTree and returns them.
+        Formats all errors into an error log and returns them.
         """
-        errorTree = {}
+        errorLog = {}
         for error in self.errorMessages:
-            errorTree[error] = errors[error]
-        return errorTree
+            errorLog[error] = errors[error]
+        return errorLog
 
 class ItemValidator:
     def __init__(self, item, pricingRules):
@@ -265,7 +265,7 @@ class UnidaysDiscountChallenge:
             return validationErrors
         # continue if no validation errors are found
         elif not validationErrors:
-            # add the item to the baskets
+            # add the item to the basket
             itemAddedRes = self.basket.AddItem(item)
             # update the total price
             self._UpdateTotalPrice(itemAddedRes['priceChange'])
