@@ -10,10 +10,12 @@ app = Flask(__name__)
 CORS(app)
 
 """
-GET Request
+@type: [GET]
+@path: '/'
 @params: none
 @query: none
 @body: none
+@response:
 Success (status 200):
 {
     "Mesage": "Server is live."
@@ -25,55 +27,45 @@ def server_check():
     return ({'Message': 'Server is live.'}, statusCodes['success'])
 
 """
-POST Request
+@type: [POST]
+@path: '/price'
 @params: none
 @query: none
-@body: {"items": "abccdz"}
-Success (status 200):
+@body: {"items": "bbbbccccz"}
+@response: 
+Success (status 200)
 {
     "Basket": {
-        "A": {
-            "finalCost": 8,
-            "itemSavings": 0,
-            "quantity": 1,
-            "unitPrice": 8
-        },
         "B": {
-            "finalCost": 12,
-            "itemSavings": 0,
-            "quantity": 1,
+            "finalCost": 40,
+            "itemSavings": 8,
+            "quantity": 4,
             "unitPrice": 12
         },
         "C": {
-            "finalCost": 8,
-            "itemSavings": 0,
-            "quantity": 2,
+            "finalCost": 14,
+            "itemSavings": 2,
+            "quantity": 4,
             "unitPrice": 4
-        },
-        "D": {
-            "finalCost": 7,
-            "itemSavings": 0,
-            "quantity": 1,
-            "unitPrice": 7
         }
     },
-    "DeliveryCharge": 7,
+    "DeliveryCharge": 0,
     "Errors": {
         "Item Z": [
             {
-                "noPricingRules": "ERROR: An item was passed that has not 
-                been included in the pricing rules."
+                "noPricingRules": "ERROR: An item was passed that has 
+                not been included in the pricing rules."
             }
         ]
     },
-    "Savings": 0,
-    "Total": 35
+    "Savings": 10,
+    "Total": 62
 }
-Failure (code 400)
+Failure (status 400):
 {
     "Message": "ERROR: An incorrect JSON body was passed with the request. 
-    Please provide a JSON body with an items key and list of items 
-    e.g. {items: abc}."
+    Please provide a JSON body with an items key and list of items e.g. 
+    {items: abc}."
 }
 """
 @app.route('/price', methods=['POST'])
