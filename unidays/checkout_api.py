@@ -3,8 +3,8 @@ from flask_cors import CORS
 
 from unidays import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
-from run_uindays import RunUnidays
-from api_config import errors
+from unidays_run import RunUnidays
+from config_api import errors
 
 app = Flask(__name__)
 CORS(app)

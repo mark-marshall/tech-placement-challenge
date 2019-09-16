@@ -1,6 +1,6 @@
 from unidays import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
-from run_uindays import RunUnidays
+from unidays_run import RunUnidays
 
 itemsToAdd = list(str(input("Type all items to be added here: ")).upper())
     
