@@ -56,7 +56,7 @@ class ItemValidator:
         elif self.item in self.pricingRules:
             self.itemPricingRules = self.pricingRules[self.item]
             self._CheckValidPricingRules()
-        # process any errors that are found in the checks
+        # process and return any errors that are found in the checks
         errorTree = self._RunErrorLogger()
         if errorTree:
             return errorTree
@@ -260,10 +260,10 @@ class UnidaysDiscountChallenge:
         # check to make sure correct rules have been provided for the item
         validator = ItemValidator(item, self.pricingRules)
         validationErrors = validator.CheckValidity()
-        # if validations errors are found, finish the program and return the errors
+        # if validation errors are found for the item, return the errors
         if validationErrors:
             return validationErrors
-        # otherwise continue the program
+        # continue if no validation errors are found
         elif not validationErrors:
             # add the item to the baskets
             itemAddedRes = self.basket.AddItem(item)
