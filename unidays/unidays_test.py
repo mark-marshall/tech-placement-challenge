@@ -1,5 +1,6 @@
 import unittest
 from unidays import UnidaysDiscountChallenge
+from utils import errors
 from config import pricingRules, deliveryRules
 from config_alt import pricingRulesAlt, deliveryRulesAlt
 
@@ -20,22 +21,19 @@ class Test(unittest.TestCase):
     
     def test_invalid_item(self):
         """
-        Tests for a sys exit when an invalidItem is passed.
+        Tests for the correct error response when an invalidItem is passed.
         """
         priceCalculator = UnidaysDiscountChallenge(self.pricingRules,self.deliveryRules)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('Z')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('Z')['noPricingRules'], errors['noPricingRules'])
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('I')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('I')['noStatus'], errors['noStatus'])
 
         priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
-        with self.assertRaises(SystemExit) as status:
-            priceCalculator.AddToBasket('J')
-        self.assertEqual(status.exception.code, 0)
+        self.assertEqual(priceCalculator.AddToBasket('J')['noDiscountFrequency'], errors['noDiscountFrequency'])
+
+        priceCalculator = UnidaysDiscountChallenge(self.pricingRulesAlt,self.deliveryRulesAlt)
+        self.assertEqual(priceCalculator.AddToBasket('J')['noDiscountedPrice'], errors['noDiscountedPrice'])
 
     def test_non_dicounts_total(self):
         """

@@ -1,21 +1,18 @@
-import sys
-
-from config import errors, classInjectionMap, itemValidatorMap
+from utils import errors, classInjectionMap, itemValidatorMap
 
 class ErrorLogger:
-    def __init__(self, errorMessages, exitCode):
+    def __init__(self, errorMessages):
         self.errorMessages = errorMessages
-        self.exitCode = exitCode
 
     # ==== PUBLIC METHODS ====
-    def HandleError(self):
+    def FormatError(self):
         """
-        Prints each error message and executes the system
-        exit.
+        Formats all errors into an errorTree and returns them.
         """
+        errorTree = {}
         for error in self.errorMessages:
-            print(errors[error])
-        sys.exit(self.exitCode)
+            errorTree[error] = errors[error]
+        return errorTree
 
 class ItemValidator:
     def __init__(self, item, pricingRules):
@@ -30,8 +27,8 @@ class ItemValidator:
         Processes any inconsistences through the error logger.
         """
         if len(self.itemInconsistences) > 0:
-            errorLog = ErrorLogger(self.itemInconsistences, 0)
-            errorLog.HandleError()
+            errorLog = ErrorLogger(self.itemInconsistences)
+            return errorLog.FormatError()
     
     def _CheckValidPricingRules(self):
         """
@@ -60,7 +57,9 @@ class ItemValidator:
             self.itemPricingRules = self.pricingRules[self.item]
             self._CheckValidPricingRules()
         # process any errors that are found in the checks
-        self._RunErrorLogger()
+        errorTree = self._RunErrorLogger()
+        if errorTree:
+            return errorTree
 
 class Item:
     def __init__(self, name, pricingRules):
@@ -258,19 +257,24 @@ class UnidaysDiscountChallenge:
         """
         Adds the item to the basket and updates charges.
         """
-        # check to make sure pricing rules have been provided for the item
+        # check to make sure correct rules have been provided for the item
         validator = ItemValidator(item, self.pricingRules)
-        validator.CheckValidity()
-        # add the item to the basket
-        itemAddedRes = self.basket.AddItem(item)
-        # update the total price
-        self._UpdateTotalPrice(itemAddedRes['priceChange'])
-        # update the savings value
-        self._UpdateTotalSavings(itemAddedRes['savingsChange'])
-        # calculate the delivery charge
-        deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
-        # update the delivery price
-        self._UpdateDeliveryCharge(deliveryCharge)
+        validationErrors = validator.CheckValidity()
+        # if validations errors are found, finish the program and return the errors
+        if validationErrors:
+            return validationErrors
+        # otherwise continue the program
+        elif not validationErrors:
+            # add the item to the baskets
+            itemAddedRes = self.basket.AddItem(item)
+            # update the total price
+            self._UpdateTotalPrice(itemAddedRes['priceChange'])
+            # update the savings value
+            self._UpdateTotalSavings(itemAddedRes['savingsChange'])
+            # calculate the delivery charge
+            deliveryCharge = self.delivery.CalculateDeliveryPrice(self.price['Total'])
+            # update the delivery price
+            self._UpdateDeliveryCharge(deliveryCharge)
         
     def CalculateTotalPrice(self):
         """
