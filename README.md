@@ -1,9 +1,9 @@
 # UNiDAYS Discounts Coding Challenge Response
 
 ## Sections
-[Challenge](#Challenge)\n
-[Running](#Running)\n
-[Approach](#Approach)\n
+[Challenge](#Challenge) . 
+[Running](#Running) . 
+[Approach](#Approach) . 
 
 ## Challenge
 
