@@ -1,8 +1,3 @@
-from unidays import UnidaysDiscountChallenge
-from config import pricingRules, deliveryRules
-
-itemsToAdd = list(str(input("Type all items to be added here: ")).upper())
-
 class RunUnidays:
     def __init__(self, checkout, itemsToAdd):
         self.checkout = checkout
@@ -23,10 +18,10 @@ class RunUnidays:
         """
         for item in self.checkout.basket.items:
             self.detailedBasket[item] = {
-            'quantity': checkout.basket.items[item].quantity,
-            'unitPrice': checkout.basket.items[item].unitPrice,
-            'itemSavings': checkout.basket.items[item].totalItemSavings,
-            'finalCost': checkout.basket.items[item].totalItemPrice
+            'quantity': self.checkout.basket.items[item].quantity,
+            'unitPrice': self.checkout.basket.items[item].unitPrice,
+            'itemSavings': self.checkout.basket.items[item].totalItemSavings,
+            'finalCost': self.checkout.basket.items[item].totalItemPrice
             }
     
     def _Response(self):
@@ -46,7 +41,3 @@ class RunUnidays:
         self._AddItems()
         self._PopulateBasket()
         return self._Response()
-    
-checkout = UnidaysDiscountChallenge(pricingRules,deliveryRules)
-run = RunUnidays(checkout, itemsToAdd)
-print(run.All())

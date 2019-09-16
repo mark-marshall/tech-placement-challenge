@@ -278,6 +278,3 @@ class UnidaysDiscountChallenge:
         delivery charge with all discounts applied.
         """
         return self.price
-
-# TODO: Sort key order alphabetically for returned basket
-# TODO: STRETCH: Create and deploy Flask API
