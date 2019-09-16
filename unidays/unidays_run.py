@@ -3,14 +3,24 @@ class RunUnidays:
         self.checkout = checkout
         self.itemsToAdd = itemsToAdd
         self.detailedBasket = {}
+        self.errors = {}
     
     # ==== PROTECTED METHODS ====
+    def _HandleError(self, item, itemErrors):
+        """
+        Adds all errors to the errors dictionary.
+        """
+        if item not in self.errors:
+            self.errors[f"Item {item}"] = [itemErrors]
+
     def _AddItems(self):
         """
         Adds all items to the checkout.
         """
         for item in self.itemsToAdd:
-            self.checkout.AddToBasket(item)
+            itemErrors = self.checkout.AddToBasket(item)
+            if itemErrors:
+                self._HandleError(item, itemErrors)
 
     def _PopulateBasket(self):
         """
@@ -27,10 +37,12 @@ class RunUnidays:
     def _Response(self):
         """
         Combines the final pricing object with detailed basket 
-        object.
+        object and any errors.
         """
         res = self.checkout.CalculateTotalPrice()
         res['Basket'] = self.detailedBasket
+        if len(self.errors) > 0:
+            res['Errors'] = self.errors
         return res
 
     # ==== PUBLIC METHODS ====
