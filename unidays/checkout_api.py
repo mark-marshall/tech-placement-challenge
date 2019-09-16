@@ -4,7 +4,7 @@ from flask_cors import CORS
 from unidays import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
 from unidays_run import RunUnidays
-from config_api import errors
+from config_api import errors, statusCodes
 
 app = Flask(__name__)
 CORS(app)
@@ -17,11 +17,11 @@ def server_check():
 def calculate_price():
     itemsSubmitted = request.get_json()
     if 'items' not in itemsSubmitted:
-        return (errors['noItemsKey'], 400)
+        return (errors['noItemsKey'], statusCodes['badRequest'])
     itemsToAdd = list(str(itemsSubmitted['items']).upper())
     checkout = UnidaysDiscountChallenge(pricingRules,deliveryRules)
     run = RunUnidays(checkout, itemsToAdd)
-    return (run.All(), 200)
+    return (run.All(), statusCodes['success'])
     
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(port=5000)
