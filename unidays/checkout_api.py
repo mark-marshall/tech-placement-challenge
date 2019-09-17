@@ -13,7 +13,7 @@ CORS(app)
 
 # sanity check endpoint
 """
-@type: [GET]
+@method: [GET]
 @path: '/'
 @params: none
 @query: none
@@ -31,7 +31,7 @@ def server_check():
 
 # price endpoint
 """
-@type: [POST]
+@method: [POST]
 @path: '/price'
 @params: none
 @query: none
