@@ -48,7 +48,7 @@ class RunUnidays:
     # ==== PUBLIC METHODS ====
     def All(self):
         """
-        Runs all required functions to return the checkout response.
+        Runs all required functions to return the checkout.
         """
         self._AddItems()
         self._PopulateBasket()

@@ -55,9 +55,9 @@ class ItemValidator:
         # check that all relevant information has been included in the pricing rules
         elif self._item in self._pricingRules:
             self._itemPricingRules = self._pricingRules[self._item]
-            self.__CheckValidPricingRules()
+            self._CheckValidPricingRules()
         # process and return any errors that are found in the checks
-        errorTree = self.__RunErrorLogger()
+        errorTree = self._RunErrorLogger()
         if errorTree:
             return errorTree
 
@@ -94,9 +94,9 @@ class Item:
         Calls all necessary functions to update the price.
         """
         # increment the price with the full-price of the item
-        self.__IncrementFullPrice()
+        self._IncrementFullPrice()
         # calculate the final price change after adding the unit
-        self.__CalculatePriceChange()
+        self._CalculatePriceChange()
     
     def _IncrementQuantity(self):
         """
@@ -110,8 +110,8 @@ class Item:
         Calls the price calculation and returns the price change 
         associated with the added unit.
         """
-        self.__IncrementQuantity()
-        self.__CalculatePrice()
+        self._IncrementQuantity()
+        self._CalculatePrice()
         return {'priceChange': self._priceChange, 'savingsChange': self._savingsChange}
 
 class DiscountableItem(Item):
@@ -166,13 +166,13 @@ class DiscountableItem(Item):
         # hold the previous savings for the savings change calculation
         previousSavings = self._totalItemSavings
         # increment the price with the full-price of the item
-        self.__IncrementFullPrice()
+        self._IncrementFullPrice()
         # check for and apply discounts
-        self.__ApplyDiscount()
+        self._ApplyDiscount()
         # calculate the final price change after adding the unit
-        self.__CalculatePriceChange(previousPrice)
+        self._CalculatePriceChange(previousPrice)
         # calculate the final saving changes after adding the unit
-        self.__CalculateSavingsChange(previousSavings)
+        self._CalculateSavingsChange(previousSavings)
 
 class Basket:
     def __init__(self, pricingRules):
@@ -194,7 +194,7 @@ class Basket:
         Adds the item to the basket.
         """
         # check if this item type is already in the items dict
-        if self.__ItemEligibleForBasket(item):
+        if self._ItemEligibleForBasket(item):
             # determine which class the item should be created under
             classToCreate = eval(classInjectionMap[self._pricingRules[item]['status']])
             # create the class for the item
@@ -227,7 +227,7 @@ class UnidaysDiscountChallenge:
         self._deliveryRules = deliveryRules
         self._basket = Basket(self._pricingRules)
         self._delivery = Delivery(self._deliveryRules)
-        self._price = {
+        self.price = {
             'Total': 0,
             'Savings': 0,
             'DeliveryCharge': 0
@@ -238,19 +238,19 @@ class UnidaysDiscountChallenge:
         """
         Updates the total price.
         """
-        self._price['Total'] += priceChange
+        self.price['Total'] += priceChange
     
     def _UpdateTotalSavings(self, savingsChange):
         """
         Updates the total savings.
         """
-        self._price['Savings'] += savingsChange
+        self.price['Savings'] += savingsChange
 
     def _UpdateDeliveryCharge(self, deliveryCharge):
         """
         Updates the delivery charge.
         """
-        self._price['DeliveryCharge'] = deliveryCharge
+        self.price['DeliveryCharge'] = deliveryCharge
     
     # ==== PUBLIC METHODS ====
     def AddToBasket(self, item):
@@ -268,17 +268,17 @@ class UnidaysDiscountChallenge:
             # add the item to the basket
             itemAddedRes = self._basket.AddItem(item)
             # update the total price
-            self.__UpdateTotalPrice(itemAddedRes['priceChange'])
+            self._UpdateTotalPrice(itemAddedRes['priceChange'])
             # update the savings value
-            self.__UpdateTotalSavings(itemAddedRes['savingsChange'])
+            self._UpdateTotalSavings(itemAddedRes['savingsChange'])
             # calculate the delivery charge
-            deliveryCharge = self._delivery.CalculateDeliveryPrice(self._price['Total'])
+            deliveryCharge = self._delivery.CalculateDeliveryPrice(self.price['Total'])
             # update the delivery price
-            self.__UpdateDeliveryCharge(deliveryCharge)
+            self._UpdateDeliveryCharge(deliveryCharge)
         
     def CalculateTotalPrice(self):
         """
         Returns the current price of the basket and the current 
         delivery charge with all discounts applied.
         """
-        return self._price
+        return self.price
