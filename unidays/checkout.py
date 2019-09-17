@@ -1,7 +1,7 @@
-from unidays_discount import UnidaysDiscountChallenge
-from config import pricingRules, deliveryRules
-from unidays_run import RunUnidays
-from utils import userInputs, errors
+from unidays.unidays_discount import UnidaysDiscountChallenge
+from unidays.config import pricingRules, deliveryRules
+from unidays.unidays_run import RunUnidays
+from unidays.utils import userInputs, errors
 
 # initialize userInput
 userInput = None

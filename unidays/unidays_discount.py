@@ -1,4 +1,4 @@
-from utils import errors, classInjectionMap, itemValidatorMap
+from unidays.utils import errors, classInjectionMap, itemValidatorMap
 
 class ErrorLogger:
     def __init__(self, errorMessages):
