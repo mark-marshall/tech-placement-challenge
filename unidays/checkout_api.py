@@ -88,4 +88,5 @@ def calculate_price():
     # return the response from RunUnidays
     return (run.All(), statusCodes['success'])
 
-app.run()
+if name = '__main__':
+    app.run(port=5000)
