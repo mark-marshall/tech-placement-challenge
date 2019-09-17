@@ -1,4 +1,4 @@
-from unidays import UnidaysDiscountChallenge
+from unidays_discount import UnidaysDiscountChallenge
 from config import pricingRules, deliveryRules
 from unidays_run import RunUnidays
 from utils import userInputs, errors

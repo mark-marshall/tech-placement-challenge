@@ -1,6 +1,6 @@
 import unittest
 
-from unidays import UnidaysDiscountChallenge
+from unidays_discount import UnidaysDiscountChallenge
 from utils import errors
 from config import pricingRules, deliveryRules
 from config_alt import pricingRulesAlt, deliveryRulesAlt
