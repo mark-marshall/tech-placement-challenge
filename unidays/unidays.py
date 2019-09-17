@@ -2,20 +2,22 @@ from utils import errors, classInjectionMap, itemValidatorMap
 
 class ErrorLogger:
     def __init__(self, errorMessages):
+        # ==== PROTECTED PROPERTIES ====
         self._errorMessages = errorMessages
+        self._errorLog = {}
 
     # ==== PUBLIC METHODS ====
     def HandleError(self):
         """
         Formats all errors into an error log and returns them.
         """
-        errorLog = {}
         for error in self._errorMessages:
-            errorLog[error] = errors[error]
-        return errorLog
+            self._errorLog[error] = errors[error]
+        return self._errorLog
 
 class ItemValidator:
     def __init__(self, item, pricingRules):
+        # ==== PROTECTED PROPERTIES ====
         self._item = item
         self._pricingRules = pricingRules
         self._itemPricingRules = None
@@ -63,15 +65,18 @@ class ItemValidator:
 
 class Item:
     def __init__(self, name, pricingRules):
+        # ==== PROTECTED PROPERTIES ====
         self._name = name
-        self._quantity = 0
-        self._unitPrice = pricingRules['price']
+        self.quantity = 0
         # the combined cost of all items of this type including discount
-        self._totalItemPrice = 0
+        self.totalItemPrice = 0
+        # savings associated with this item type
+        self.totalItemSavings = 0
+
+        # ==== PUBLIC PROPERTIES ====
+        self.unitPrice = pricingRules['price']
         # the price change associated with adding an item
         self._priceChange = 0
-        # savings associated with this item type
-        self._totalItemSavings = 0
         # the savings associated  with adding an item
         self._savingsChange = 0
 
@@ -80,14 +85,14 @@ class Item:
         """
         Adds the full-price of an item onto the current total price.
         """
-        self._totalItemPrice += self._unitPrice
+        self.totalItemPrice += self.unitPrice
     
     def _CalculatePriceChange(self):
         """
         Updates the price change property with the latest price change 
         after adding a new unit.
         """
-        self._priceChange = self._unitPrice
+        self._priceChange = self.unitPrice
 
     def _CalculatePrice(self):
         """
@@ -102,7 +107,7 @@ class Item:
         """
         Increments the quantity of the item.
         """
-        self._quantity += 1
+        self.quantity += 1
 
     # ==== PUBLIC METHODS ====
     def PriceChange(self):
@@ -117,6 +122,7 @@ class Item:
 class DiscountableItem(Item):
     def __init__(self, name, pricingRules):
         super().__init__(name, pricingRules)
+        # ==== PROTECTED PROPERTIES ====
         # number of items required to qualify for a discount
         self._discountFrequency = pricingRules['discountFrequency']
         # price of all items combined in a discount deal
@@ -137,24 +143,24 @@ class DiscountableItem(Item):
             # reset the discount counter to 0
             self._discountCounter = 0
             # remove full prices and replace with the discounted value
-            self._totalItemPrice -= (self._unitPrice * self._discountFrequency)
-            self._totalItemPrice += self._discountedPrice
+            self.totalItemPrice -= (self.unitPrice * self._discountFrequency)
+            self.totalItemPrice += self._discountedPrice
             # update the cumulative savings associated with this item type
-            self._totalItemSavings += ((self._unitPrice * self._discountFrequency) - self._discountedPrice)
+            self.totalItemSavings += ((self.unitPrice * self._discountFrequency) - self._discountedPrice)
 
     def _CalculatePriceChange(self, previousPrice):
         """
         Updates the price change property with the latest price change 
         after adding a new unit and applying all discounts.
         """
-        self._priceChange = self._totalItemPrice - previousPrice
+        self._priceChange = self.totalItemPrice - previousPrice
     
     def _CalculateSavingsChange(self, previousSavings):
         """
         Updates the savings change property with the latest savings change 
         after adding a new unit.
         """
-        self._savingsChange = self._totalItemSavings - previousSavings
+        self._savingsChange = self.totalItemSavings - previousSavings
     
     def _CalculatePrice(self):
         """
@@ -162,9 +168,9 @@ class DiscountableItem(Item):
         applicable discounts.
         """
         # hold the previous price for the price change calculation
-        previousPrice = self._totalItemPrice
+        previousPrice = self.totalItemPrice
         # hold the previous savings for the savings change calculation
-        previousSavings = self._totalItemSavings
+        previousSavings = self.totalItemSavings
         # increment the price with the full-price of the item
         self._IncrementFullPrice()
         # check for and apply discounts
@@ -176,8 +182,11 @@ class DiscountableItem(Item):
 
 class Basket:
     def __init__(self, pricingRules):
+        # ==== PROTECTED PROPERTIES ====
         self._pricingRules = pricingRules
-        self._items = {}
+        
+        # ==== PUBLIC PROPERTIES ====
+        self.items = {}
     
     # ==== PROTECTED METHODS ====
     def _ItemEligibleForBasket(self,item):
@@ -185,7 +194,7 @@ class Basket:
         Checks to see whether the item-type is eligibile to be
         added to the basket and return True in positive cases.
         """
-        if item not in self._items:
+        if item not in self.items:
             return True
     
     # ==== PUBLIC METHODS ====
@@ -200,9 +209,9 @@ class Basket:
             # create the class for the item
             itemToAdd = classToCreate(item, self._pricingRules[item])
             # add the newly created class to the items dictionary
-            self._items[item] = itemToAdd
+            self.items[item] = itemToAdd
         # get the price change for adding a unit of the item
-        return self._items[item].PriceChange()
+        return self.items[item].PriceChange()
 
 class Delivery:
     def __init__(self, deliveryRules):
@@ -223,10 +232,13 @@ class Delivery:
     
 class UnidaysDiscountChallenge:
     def __init__(self, pricingRules, deliveryRules):
+        # ==== PROTECTED PROPERTIES ====
         self._pricingRules = pricingRules
         self._deliveryRules = deliveryRules
-        self._basket = Basket(self._pricingRules)
         self._delivery = Delivery(self._deliveryRules)
+        
+        # ==== PUBLIC PROPERTIES ====
+        self.basket = Basket(self._pricingRules)
         self.price = {
             'Total': 0,
             'Savings': 0,
@@ -266,7 +278,7 @@ class UnidaysDiscountChallenge:
         # continue if no validation errors are found
         elif not validationErrors:
             # add the item to the basket
-            itemAddedRes = self._basket.AddItem(item)
+            itemAddedRes = self.basket.AddItem(item)
             # update the total price
             self._UpdateTotalPrice(itemAddedRes['priceChange'])
             # update the savings value
@@ -278,7 +290,7 @@ class UnidaysDiscountChallenge:
         
     def CalculateTotalPrice(self):
         """
-        Returns the current price of the basket and the current 
-        delivery charge with all discounts applied.
+        Returns the current price of the basket, current savings, 
+        and the current delivery charge.
         """
         return self.price

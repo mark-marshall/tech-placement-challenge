@@ -1,4 +1,5 @@
 import unittest
+
 from unidays import UnidaysDiscountChallenge
 from utils import errors
 from config import pricingRules, deliveryRules
@@ -6,8 +7,10 @@ from config_alt import pricingRulesAlt, deliveryRulesAlt
 
 class Test(unittest.TestCase):
     def setUp(self):
+        # ==== PROTECTED PROPERTIES ====
         self._pricingRules = pricingRules
         self._deliveryRules = deliveryRules
+        # alternative configs for extended test cases
         self._pricingRulesAlt = pricingRulesAlt
         self._deliveryRulesAlt = deliveryRulesAlt 
     

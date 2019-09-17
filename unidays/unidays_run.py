@@ -1,5 +1,6 @@
 class RunUnidays:
     def __init__(self, checkout, itemsToAdd):
+        # ==== PROTECTED PROPERTIES ====
         self._checkout = checkout
         self._itemsToAdd = itemsToAdd
         self._detailedBasket = {}
