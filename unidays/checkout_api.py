@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, Response, request
 from flask_cors import CORS
 
@@ -88,5 +90,5 @@ def calculate_price():
     # return the response from RunUnidays
     return (run.All(), statusCodes['success'])
 
-if name = '__main__':
-    app.run(port=5000)
+if __name__ == '__main__':
+    app.run(port=8000)
