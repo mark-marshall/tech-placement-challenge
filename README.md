@@ -5,7 +5,6 @@
 [Approach](#Approach) . 
 [Instructions](#Instructions)
 
-
 ## Challenge
 
 This challenge is for you to make use of your problem solving skills as well as demonstrate your understanding of good object-oriented programming and SOLID design principles.
