@@ -3,10 +3,10 @@ import os
 from flask import Flask, Response, request
 from flask_cors import CORS
 
-from unidays.unidays_discount import UnidaysDiscountChallenge
-from unidays.config import pricingRules, deliveryRules
-from unidays.unidays_run import RunUnidays
-from unidays.config_api import errors, statusCodes
+from unidays import UnidaysDiscountChallenge
+from config import pricingRules, deliveryRules
+from unidays_run import RunUnidays
+from config_api import errors, statusCodes
 
 # create Flask app
 app = Flask(__name__)
