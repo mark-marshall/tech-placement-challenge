@@ -90,4 +90,4 @@ def calculate_price():
 
 # serve the app locally on port 5000   
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run()
