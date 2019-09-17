@@ -1,1 +1,1 @@
-web: gunicorn unidays:checkout_api
+web: gunicorn unidays:app
