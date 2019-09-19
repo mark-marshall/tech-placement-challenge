@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, Response, request
 from flask_cors import CORS
 
@@ -13,7 +11,7 @@ app = Flask(__name__)
 # enable CORS
 CORS(app)
 
-# sanity check endpoint
+# ==== SANITY CHECK ENDPOINT ====
 """
 @method: [GET]
 @path: '/'
@@ -31,7 +29,7 @@ def server_check():
     # return success message for sanity check
     return ({'Message': 'Server is live.'}, statusCodes['success'])
 
-# price endpoint
+# ==== PRICE ENDPOINT ====
 """
 @method: [POST]
 @path: '/price'

@@ -9,7 +9,7 @@ build/
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Flask stuff:
+# Flask
 instance/
 .webassets-cache
 
@@ -25,5 +25,5 @@ ENV/
 env.bak/
 venv.bak/
 
-# vscode
+# Vscode
 .vscode
