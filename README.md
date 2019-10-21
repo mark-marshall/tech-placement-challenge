@@ -52,11 +52,8 @@ The following endpoints are available:
 2. [Price](#Price)
 
 #### Sanity Check
-@method: **GET** </br>
-@path: **/** </br>
-@params: none </br>
-@query: none </br>
-@body: none </br>
+@method: `GET` </br>
+@path: `/` </br>
 @responses: </br>
 `200`
 ```
@@ -66,11 +63,12 @@ The following endpoints are available:
 ```
 
 #### Price
-@method: **POST** </br>
-@path: **/price** </br>
-@params: none </br>
-@query: none </br>
-@body: {"items": "bbbbccccz"} </br>
+@method: `POST` </br>
+@path: `/price` </br>
+@body: </br>
+```
+{"items": "bbbbccccz"}
+```
 @responses: </br>
 `200`
 ```
