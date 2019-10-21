@@ -39,10 +39,6 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
     - `DeliveryCharge` - The delivery charge for the order
 
 ## Approach
-## Contents
-1. [Challenge](#Challenge)
-2. [Approach](#Approach)
-3. [Instructions](#Instructions)
 
 ## Instructions
 
@@ -50,6 +46,69 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 2. [Running the REPL locally with tests](#Running-the-REPL-locally-with-tests)
 
 ### Using the public API
+All API requests are made to: https://unidays-discount.herokuapp.com </br>
+
+#### Sanity Check Endpoint
+@method: **GET**
+@path: **/**
+@parms: none
+@query: none
+@body: none
+@responses:
+`200`
+```
+    {
+        "Message":"Server is live."
+    }
+```
+
+#### Price Endpoint
+@method: **POST**
+@path: **/price**
+@params: none
+@query: none
+@body: {"items": "bbbbccccz"}
+@responses:
+`200`
+```
+    {
+        "Basket": {
+            "B": {
+                "finalCost": 40,
+                "itemSavings": 8,
+                "quantity": 4,
+                "unitPrice": 12
+            },
+            "C": {
+                "finalCost": 14,
+                "itemSavings": 2,
+                "quantity": 4,
+                "unitPrice": 4
+            }
+        },
+        "DeliveryCharge": 0,
+        "Errors": {
+            "Item Z": [
+                {
+                    "noPricingRules": "ERROR: An item was passed that has 
+                    not been included in the pricing rules."
+                }
+            ]
+        },
+        "Savings": 10,
+        "Total": 62
+    }
+```
+`400`
+```
+    {
+        "Message": "ERROR: An incorrect JSON body was passed with the request. 
+        Please provide a JSON body with an items key and list of items e.g. 
+        {items: abc}."    
+    }
+```
+
+
 
 ### Running the REPL locally with tests
 
