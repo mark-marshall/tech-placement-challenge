@@ -118,7 +118,7 @@ Status 400
 1. Ensure you have the following installed:
    - Python 3.7: https://www.python.org/downloads/
    - Pipenv: https://pypi.org/project/pipenv/
-2. cd into the directory where you would like this code to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`.
+2. `cd` into the directory where you would like this code to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`.
 3. Run `pipenv install` to install the dependencies from the `Pipfile`.
 
 #### Tests
