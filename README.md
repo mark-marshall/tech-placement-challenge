@@ -116,7 +116,7 @@ Status 400
 #### Setup
 1. Ensure you have the following installed:
    - Python v3.7 or later: https://www.python.org/downloads/
-2. `cd` into the directory where you would like the repo to be stored. If you have git installed, run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`. Alternatively, download the ZIP.
+2. If you have git istalled, `cd` into the directory where you would like the repo to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`. Alternatively, download the ZIP.
 3. If you have pipenv installed, run `pipenv install` to install all required dependencies from `Pipfile`. Alternatively, run `pip3 install -r requirements.txt` to install all required dependencies from `requirements.txt`.
 
 #### Tests
