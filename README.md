@@ -67,7 +67,7 @@ Status 200
 ##### Request
 @method: `POST` </br>
 @path: `/price` </br>
-@body: `JSON``{"items": "bbbbccccz"}`
+@body: `{"items": "bbbbccccz"}`
 
 ##### Response
 ```
