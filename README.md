@@ -43,8 +43,7 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 ## Instructions
 
 1. [Using the public API](#Using-the-public-API)
-2. [Running a local REPL](#Running-a-local-REPL)
-3. [Testing](#Testing)
+2. [Running locally](#Running-locally)
 
 ### Using the public API
 All API requests are made to: https://unidays-discount.herokuapp.com </br>
@@ -110,6 +109,4 @@ Status 400
     }
 ```
 
-### Running a local REPL
-
-### Testing
+### Running locally
