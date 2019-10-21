@@ -43,8 +43,8 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 | Focus | Description  | Solution |
 | ---- | ------ | -------- |
 | Users (internal devs)    | Creating a highly readable, maintainable, and configurable program.   | None |
-| Users(external devs/customers)    | Creating the most useful/acessible program for externeral developers and end-customers. | 2 for £20.00 |
-| Tests    | Writing tests that describe the desired behaviour of the application.  | 3 for £10.00 |
+| Users (external devs)    | Creating a highly usable and useful program. | 2 for £20.00 |
+| Tests    | Testing the application with all behaviours and edge cases.  | 3 for £10.00 |
 | Unhappy Path    | Handling all possible errors and returning useful information. | Buy 1 get 1 free |
 
 ## Instructions
