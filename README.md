@@ -54,10 +54,10 @@ The following endpoints are available:
 #### Sanity Check
 @method: **GET** </br>
 @path: **/** </br>
-@parms: none </br>
+@params: none </br>
 @query: none </br>
 @body: none </br>
-@responses:
+@responses: </br>
 `200`
 ```
     {
@@ -71,7 +71,7 @@ The following endpoints are available:
 @params: none </br>
 @query: none </br>
 @body: {"items": "bbbbccccz"} </br>
-@responses:
+@responses: </br>
 `200`
 ```
     {
