@@ -110,3 +110,12 @@ Status 400
 ```
 
 ### Running locally
+1. [Setup](#Setup)
+2. [Tests](#Tests)
+3. [REPL](#REPL)
+
+#### Setup
+
+#### Tests
+
+#### REPL
