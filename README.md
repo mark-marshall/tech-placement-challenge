@@ -47,10 +47,11 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 
 ### Using the public API
 All API requests are made to: https://unidays-discount.herokuapp.com </br>
-Requests and reponses are given in JSON. </br>
 The following endpoints are available:
 1. [Sanity Check](#Sanity-Check)
 2. [Price](#Price)
+
+NOTE: Requests and responses are given in JSON only.
 
 #### Sanity Check
 ##### Request
