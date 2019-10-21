@@ -52,7 +52,7 @@ The following endpoints are available:
 2. [Price](#Price)
 
 #### Sanity Check
-Request </br>
+##### Request
 @method: `GET` </br>
 @path: `/` </br>
 Response </br>
@@ -64,12 +64,12 @@ Status 200
 ```
 
 #### Price
-Request </br>
+##### Request
 @method: `POST` </br>
 @path: `/price` </br>
 @body: `{"items": "bbbbccccz"}`
 
-Response </br>
+##### Response
 ```
 Status 200
     {
