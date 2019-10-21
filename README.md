@@ -52,10 +52,10 @@ The following endpoints are available:
 2. [Price](#Price)
 
 #### Sanity Check
-##### Request
+Request </br>
 @method: `GET` </br>
 @path: `/` </br>
-##### Response
+Response </br>
 ```
 Status 200
     {
@@ -64,12 +64,12 @@ Status 200
 ```
 
 #### Price
-##### Request
+Request </br>
 @method: `POST` </br>
 @path: `/price` </br>
 @body: `{"items": "bbbbccccz"}`
 
-##### Response
+Response </br>
 ```
 Status 200
     {
