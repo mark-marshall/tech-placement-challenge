@@ -40,7 +40,7 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 
 ## Approach
 
-The solution was shaped by 4 focal points: (1) internal users, (2) external users, (3) testing, and (4) coding for the unhappy path.
+The solution was shaped by 4 focal points: (1) internal users, (2) external users, (3) testing, and (4) the unhappy path.
 
 | Focus | Description  | Solution | Improvements |
 | ----- | ------ | -------- | --------- |
