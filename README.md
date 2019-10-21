@@ -57,7 +57,7 @@ The following endpoints are available:
 @path: `/` </br>
 ##### Response
 ```
-200
+Status Code 200
     {
         "Message":"Server is live."
     }
@@ -71,7 +71,7 @@ The following endpoints are available:
 
 ##### Response
 ```
-200
+Status Code 200
     {
         "Basket": {
             "B": {
@@ -101,7 +101,7 @@ The following endpoints are available:
     }
 ```
 ```
-400
+Status Code 400
     {
         "Message": "ERROR: An incorrect JSON body was passed with the request. 
         Please provide a JSON body with an items key and list of items e.g. 
