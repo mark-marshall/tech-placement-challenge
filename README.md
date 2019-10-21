@@ -1,9 +1,9 @@
 # UNiDAYS Discounts Coding Challenge
 
 ## Contents
-1.[Challenge](#Challenge)
-2.[Approach](#Approach)
-3.[Instructions](#Instructions)
+1. [Challenge](#Challenge)
+2. [Approach](#Approach)
+3. [Instructions](#Instructions)
 
 ## Challenge
 
