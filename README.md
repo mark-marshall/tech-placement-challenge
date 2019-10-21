@@ -116,9 +116,8 @@ Status 400
 #### Setup
 1. Ensure you have the following installed:
    - Python 3.7: https://www.python.org/downloads/
-   - Pipenv: https://pypi.org/project/pipenv/
 2. `cd` into the directory where you would like the repo to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`.
-3. Run `pipenv install` to install all required dependencies from the `Pipfile`.
+3. If you have pipenv installed, run `pipenv install` to install all required dependencies from `Pipfile`. Alternatively run `pip3 install -r requirements.txt` to install all required dependencies from the `requirements.txt`.
 
 #### Tests
 1. `cd` into the unidays folder.
