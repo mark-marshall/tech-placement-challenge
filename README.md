@@ -128,4 +128,3 @@ Status 400
 #### REPL
 1. `cd` into the unidays folder.
 2. Run `python3 checkout.py`.
-3. Follow the instructions in your terminal.
