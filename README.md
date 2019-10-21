@@ -120,9 +120,9 @@ Status 400
 3. If you have pipenv installed, run `pipenv install` to install all required dependencies from `Pipfile`. Alternatively, run `pip3 install -r requirements.txt` to install all required dependencies from `requirements.txt`.
 
 #### Tests
-1. `cd` into the unidays folder.
+1. `cd` into the `unidays/` folder.
 2. Run `python3 unidays_test.py`.
 
 #### REPL
-1. `cd` into the unidays folder.
+1. `cd` into the `unidays/` folder.
 2. Run `python3 checkout.py`.
