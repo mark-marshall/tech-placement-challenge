@@ -46,8 +46,7 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 2. [Running locally](#Running-locally)
 
 ### Using the public API
-All API requests are made to: https://unidays-discount.herokuapp.com </br>
-The following endpoints are available:
+All API requests are made to: https://unidays-discount.herokuapp.com. The following endpoints are available:
 1. [Sanity Check](#Sanity-Check)
 2. [Price](#Price)
 
