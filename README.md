@@ -40,7 +40,7 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 
 ## Approach
 
-The design of the solution can roughly be mapped to the following table in which the final output was shaped in some way by 4 key focus areas: (1) users (internal), (2) users (external), (3) testing, and (4) coding for the unhappy path.
+The solution was shaped by 4 key focus areas: (1) internal users, (2) external users, (3) testing, and (4) coding for the unhappy path.
 
 | Focus | Description  | Solution | Improvements |
 | ----- | ---- | -------- | --------- |
