@@ -51,8 +51,6 @@ The following endpoints are available:
 1. [Sanity Check](#Sanity-Check)
 2. [Price](#Price)
 
-NOTE: Requests and responses are given in JSON only.
-
 #### Sanity Check
 ##### Request
 @method: `GET` </br>
@@ -69,7 +67,7 @@ Status 200
 ##### Request
 @method: `POST` </br>
 @path: `/price` </br>
-@body: `{"items": "bbbbccccz"}`
+@body: `JSON``{"items": "bbbbccccz"}`
 
 ##### Response
 ```
