@@ -47,13 +47,16 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 
 ### Using the public API
 All API requests are made to: https://unidays-discount.herokuapp.com </br>
+The following endpoints are available:
+1. [Sanity Check](#Sanity-Check)
+2. [Price](#Price)
 
-#### Sanity Check Endpoint
-@method: **GET**
-@path: **/**
-@parms: none
-@query: none
-@body: none
+#### Sanity Check
+@method: **GET** </br>
+@path: **/** </br>
+@parms: none </br>
+@query: none </br>
+@body: none </br>
 @responses:
 `200`
 ```
@@ -62,12 +65,12 @@ All API requests are made to: https://unidays-discount.herokuapp.com </br>
     }
 ```
 
-#### Price Endpoint
-@method: **POST**
-@path: **/price**
-@params: none
-@query: none
-@body: {"items": "bbbbccccz"}
+#### Price
+@method: **POST** </br>
+@path: **/price** </br>
+@params: none </br>
+@query: none </br>
+@body: {"items": "bbbbccccz"} </br>
 @responses:
 `200`
 ```
