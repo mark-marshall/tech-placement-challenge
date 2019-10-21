@@ -67,10 +67,8 @@ The following endpoints are available:
 ##### Request
 @method: `POST` </br>
 @path: `/price` </br>
-@body: </br>
-```
-{"items": "bbbbccccz"}
-```
+@body: `{"items": "bbbbccccz"}`
+
 ##### Response
 ```
 200
