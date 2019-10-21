@@ -115,6 +115,8 @@ Status 400
 3. [REPL](#REPL)
 
 #### Setup
+1. cd into the directory where you would like this code to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`. 
+2. Open the cloned folder in your preferred IDE.
 
 #### Tests
 
