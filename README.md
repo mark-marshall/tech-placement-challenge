@@ -51,6 +51,7 @@ Requests and reponses are made in JSON to the following endpoints:
 1. [Sanity Check](#Sanity-Check)
 2. [Price](#Price)
 
+---
 #### Sanity Check
 ##### Request:
 @method: `GET` </br>
@@ -63,6 +64,7 @@ Status 200
     }
 ```
 
+---
 #### Price
 ##### Request:
 @method: `POST` </br>
