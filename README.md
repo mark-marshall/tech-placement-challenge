@@ -46,8 +46,8 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
 
 ## Instructions
 
-1. [Using the public API] (#Using the public API)
-2. [Running the REPL locally with tests] (#Running the REPL locally with tests)
+1. [Using the public API] (#Using-the-public-API)
+2. [Running the REPL locally with tests] (#Running-the-REPL-locally-with-tests)
 
 ### Using the public API
 
