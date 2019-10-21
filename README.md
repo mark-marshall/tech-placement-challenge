@@ -39,6 +39,18 @@ Implement a `UnidaysDiscountChallenge` class with two public methods.
     - `DeliveryCharge` - The delivery charge for the order
 
 ## Approach
+## Contents
+1. [Challenge](#Challenge)
+2. [Approach](#Approach)
+3. [Instructions](#Instructions)
 
 ## Instructions
+
+1. [Using the public API] (#Using the public API)
+2. [Running the REPL locally with tests] (#Running the REPL locally with tests)
+
+### Using the public API
+
+### Running the REPL locally with tests
+
 
