@@ -115,15 +115,17 @@ Status 400
 3. [REPL](#REPL)
 
 #### Setup
-1. Ensure you have Python(3.7): https://www.python.org/downloads/ and Pipenv: https://pypi.org/project/pipenv/ installed.
+1. Ensure you have the following installed:
+   - Python 3.7: https://www.python.org/downloads/
+   - Pipenv: https://pypi.org/project/pipenv/
 2. cd into the directory where you would like this code to be stored and run `git clone https://github.com/mark-marshall/tech-placement-challenge.git`.
 3. Run `pipenv install` to install the dependencies from the `Pipfile`.
 
 #### Tests
-1. cd into the unidays folder.
+1. `cd` into the unidays folder.
 2. Run `python3 unidays_test.py`.
 
 #### REPL
-1. cd into the unidays folder.
+1. `cd` into the unidays folder.
 2. Run `python3 checkout.py`.
 3. Follow the instructions in your terminal.
