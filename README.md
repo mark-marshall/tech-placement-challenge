@@ -55,8 +55,8 @@ The following endpoints are available:
 @method: `GET` </br>
 @path: `/` </br>
 @responses: </br>
-`200`
 ```
+200
     {
         "Message":"Server is live."
     }
@@ -70,8 +70,8 @@ The following endpoints are available:
 {"items": "bbbbccccz"}
 ```
 @responses: </br>
-`200`
 ```
+200
     {
         "Basket": {
             "B": {
@@ -100,8 +100,8 @@ The following endpoints are available:
         "Total": 62
     }
 ```
-`400`
 ```
+400
     {
         "Message": "ERROR: An incorrect JSON body was passed with the request. 
         Please provide a JSON body with an items key and list of items e.g. 
